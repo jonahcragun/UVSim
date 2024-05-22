@@ -24,18 +24,23 @@ using std::to_string;
 // UVSim VM that interprets BasicML (a simple machine language)
 // has a memory array and accumulator register
 class UVSim {
-	short main_memory[100];
+	short main_memory[MEMORY_SIZE];
 	short accumulator;
 
-	public:
-
-	UVSim() {
-		read_file("test.txt");
-		run();
-	}
 	// read in file to memory starting at location 00
-	void read_file(const string& file) {
+	void read_file() {
+		string file;
+		cout << "Enter a BasicML file name: ";
+		cin >> file;
+		
+
 		ifstream ifs (file);
+		
+		// check if file is valid
+		if (!ifs) {
+			throw runtime_error("Invalid file entered");
+		}
+
 		string word;
 		unsigned short i;
 
@@ -49,7 +54,7 @@ class UVSim {
 	}
 
 	// run program starting at memory location 00
-	void run() {
+	void execute() {
 		unsigned short cur = 0;
 		while (cur < MEMORY_SIZE) {
 			short op_code;
@@ -109,15 +114,25 @@ class UVSim {
 			cur = halt();
 		}
 		else {
-			string e = "Invalid op code on line: " + to_string(cur);
+			string e = "Invalid op code at address: " + to_string(cur);
 			throw runtime_error(e); 
 		}
 		return ++cur;
 	}
+	
+	// start VM, get user input for file name, load into memory, and execute program
+	void run() {
+		read_file();	
+		execute();
+	}
 
+	public:
+
+	UVSim() {
+		run();
+	}
+	
 };
-
-// read BasicML file into UVSim memory
 
 
 int main() {
