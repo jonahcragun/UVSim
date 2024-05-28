@@ -6,6 +6,7 @@
 #include "memory_op.h"
 #include "arithmetic_op.h"
 #include "control_op.h"
+#include "ls_op.h"
 
 #define MEMORY_SIZE 100
 
@@ -84,7 +85,7 @@ class UVSim {
 			write(accumulator, main_memory, mem_addr);
 		}
 		else if (op_code == 20) {
-
+			load(accumulator, main_memory, mem_addr);
 		}
 		else if (op_code == 21) {
 
@@ -96,10 +97,10 @@ class UVSim {
 
 		}
 		else if (op_code == 32) {
-
+			divide(accumulator, main_memory, mem_addr);
 		}
 		else if (op_code == 33) {
-
+			multiply(accumulator, main_memory, mem_addr);
 		}
 		else if (op_code == 40) {
 
