@@ -102,7 +102,7 @@ class UVSim {
 
 		}
 		else if (op_code == 40) {
-
+            // return branch();
 		}
 		else if (op_code == 41) {
 
