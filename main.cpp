@@ -96,11 +96,11 @@ class UVSim {
 		}
         // 30: ADD
 		else if (op_code == 30) {
-
+            add(accumulator, main_memory, mem_addr);
 		}
         // 31: SUBTRACT
 		else if (op_code == 31) {
-
+            subtract(accumulator, main_memory, mem_addr);
 		}
         // 32: DIVIDE
 		else if (op_code == 32) {
