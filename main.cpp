@@ -6,7 +6,6 @@
 #include "memory_op.h"
 #include "arithmetic_op.h"
 #include "control_op.h"
-#include "ls_op.h"
 
 #define MEMORY_SIZE 100
 
@@ -18,6 +17,7 @@ using std::ifstream;
 using std::string;
 using std::stoi;
 using std::runtime_error;
+using std::out_of_range;
 using std::cerr;
 using std::exception;
 using std::to_string;
@@ -78,45 +78,58 @@ class UVSim {
 	// execute operation associated with op code 
 	// return next memory address to run
 	unsigned short execute_op(short op_code, short mem_addr, unsigned short cur) {
+        // 10: READ
 		if (op_code == 10) {
 			read(accumulator, main_memory, mem_addr);
 		}
+        // 11: WRITE
 		else if (op_code == 11) {
 			write(accumulator, main_memory, mem_addr);
 		}
+        // 20: LOAD
 		else if (op_code == 20) {
 			load(accumulator, main_memory, mem_addr);
 		}
+        // 21: STORE
 		else if (op_code == 21) {
-
+            store(accumulator, main_memory, mem_addr);
 		}
+        // 30: ADD
 		else if (op_code == 30) {
 
 		}
+        // 31: SUBTRACT
 		else if (op_code == 31) {
 
 		}
+        // 32: DIVIDE
 		else if (op_code == 32) {
 			divide(accumulator, main_memory, mem_addr);
 		}
+        // 33: MULTIPLY
 		else if (op_code == 33) {
 			multiply(accumulator, main_memory, mem_addr);
 		}
+        // 40: BRANCH
 		else if (op_code == 40) {
-            // return branch();
+            return mem_addr;
 		}
+        // 41: BRANCHNEG
 		else if (op_code == 41) {
-
+            return branchNeg(accumulator, cur, mem_addr);
 		}
+        // 42: BRANCHZERO
 		else if (op_code == 42) {
-
+            return branchZero(accumulator, cur, mem_addr);
 		}
+        // 43:
 		else if (op_code == 43) {
 			cur = halt();
 		}
+        // INVALID OPCODE
 		else {
 			string e = "Invalid op code at address: " + to_string(cur);
-			throw runtime_error(e); 
+			throw runtime_error(e);
 		}
 		return ++cur;
 	}
