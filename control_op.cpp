@@ -13,3 +13,8 @@ short branchNeg(short& accumulator, unsigned short& cur_addr, short& potential_a
 short branchZero(short& accumulator, unsigned short& cur_addr, short& potential_addr){
     return (accumulator == 0) ? potential_addr : ++cur_addr;
 }
+
+// Return the memory address to switch the current memory address
+short branch(short& mem_addr) {
+    return mem_addr;
+}

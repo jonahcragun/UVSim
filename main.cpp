@@ -43,7 +43,7 @@ class UVSim {
 		}
 
 		string word;
-		unsigned short i;
+		unsigned short i = 0;
 
 		while (getline(ifs, word)) {
 			if (i > 99)
@@ -96,11 +96,11 @@ class UVSim {
 		}
         // 30: ADD
 		else if (op_code == 30) {
-
+            add(accumulator, main_memory, mem_addr);
 		}
         // 31: SUBTRACT
 		else if (op_code == 31) {
-
+            subtract(accumulator, main_memory, mem_addr);
 		}
         // 32: DIVIDE
 		else if (op_code == 32) {
@@ -112,7 +112,7 @@ class UVSim {
 		}
         // 40: BRANCH
 		else if (op_code == 40) {
-            return mem_addr;
+            return branch(mem_addr);
 		}
         // 41: BRANCHNEG
 		else if (op_code == 41) {
