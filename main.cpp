@@ -112,7 +112,7 @@ class UVSim {
 		}
         // 40: BRANCH
 		else if (op_code == 40) {
-            return mem_addr;
+            return branch(mem_addr);
 		}
         // 41: BRANCHNEG
 		else if (op_code == 41) {
