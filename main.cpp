@@ -43,7 +43,7 @@ class UVSim {
 		}
 
 		string word;
-		unsigned short i;
+		unsigned short i = 0;
 
 		while (getline(ifs, word)) {
 			if (i > 99)
