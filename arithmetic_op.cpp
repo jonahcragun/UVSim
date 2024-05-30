@@ -1,12 +1,25 @@
 #include "arithmetic_op.h"
 #include <iostream>
+#include <stdexcept>
 
-void divide(short&, short*, short){
+// Divide the value in the memory to the accumulator
+void divide(short& accumulator, short* main_memory, short mem_addr){
+    if (mem_addr < 0 || mem_addr >= 100){
+        throw std::out_of_range("DIVIDE Error: Memory address " + std::to_string(mem_addr) + " is out of range.");    
+    }
+    if (main_memory[mem_addr] == 0){
+        throw std::runtime_error("DIVIDE Error: Division by zero.");
+    }
+    accumulator /= main_memory[mem_addr];
 
 }
 
-void multiply(short&, short*, short){
-
+// Multiply the value in the memory to the accumulator
+void multiply(short& accumulator, short* main_memory, short mem_addr){
+    if(mem_addr < 0 || mem_addr >= 100){
+        throw std::out_of_range("MULTIPLY Error: Memory address " + std::to_string(mem_addr) + " is out of range.");
+    }
+    accumulator *= main_memory[mem_addr];
 }
 
 // Add the value in the memory address to the accumulator
