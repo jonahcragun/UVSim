@@ -1,21 +1,33 @@
 #include "test.h"
-#include <stdexcept>
+#include "uvsim.h"
+#include "constants.h"
 #include "io_op.h"
 #include "memory_op.h"
 #include "arithmetic_op.h"
 #include "control_op.h"
 
-void use_case_one() {
+#include <stdexcept>
+
+using std::exception;
+
+void case_one() {
     
 };
-void use_case_two() {
+void case_two() {
     
 };
-void use_case_three() {
+void case_three() {
     
 };
 
 int main() {
-    
+    try {
+        case_one();
+        case_two();
+        case_three();
+    }
+    catch(std::exception& e) {
+        std::cerr << e.what() << std::endl;
+    }
     return 0;
 }

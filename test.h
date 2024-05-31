@@ -1,8 +1,8 @@
 #ifndef TEST_H
-#define TEST_h
+#define TEST_H
 
-void use_case_one();
-void use_case_two();
-void use_case_three();
+void case_one();
+void case_two();
+void case_three();
 
 #endif
