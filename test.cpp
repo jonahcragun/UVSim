@@ -1,8 +1,5 @@
 #include "test.h"
 #include "uvsim.h"
-#include "constants.h"
-#include "io_op.h"
-#include "memory_op.h"
 #include "arithmetic_op.h"
 #include "control_op.h"
 #include <stdexcept>
@@ -10,8 +7,7 @@
 
 using std::exception;
 
-void case_one() {
-    // Add Case One
+void case_one() { // Add Case One
     short accumulator = 0;
     short main_memory[10];
     main_memory[3] = 10;
@@ -22,7 +18,7 @@ void case_one() {
     }
 };
 
-void case_two() {
+void case_two() { // Add Case Two
     bool did_catch = false;
     try {
         short accumulator = 10;
@@ -38,8 +34,7 @@ void case_two() {
     }
 };
 
-void case_three() {
-    // Subtract Case One
+void case_three() { // Subtract Case One
     short accumulator = 10;
     short main_memory[10];
     main_memory[4] = 8;
@@ -50,7 +45,7 @@ void case_three() {
     }
 };
 
-void case_four() {
+void case_four() { // Subtract Case Two
     bool did_catch = false;
     try {
         short accumulator = 10;
@@ -66,15 +61,14 @@ void case_four() {
     }
 }
 
-void case_five() {
-    // Branch Cases
+void case_five() { // Branch Case One
     short br_target = 12;
     if (branch(br_target) != 12) {
         throw std::logic_error("Branch function did not return the correct target.");
     }
 };
 
-void case_six() {
+void case_six() { // Branch Case Two
     bool did_catch = false;
     try {
         short mem_addr = 100;
@@ -87,6 +81,78 @@ void case_six() {
         throw std::range_error("Branch block did not throw the correct error when index out of range.");
     }
 };
+void case_seven() { // Case One
+    
+}
+
+void case_eight() { // Case Two
+    
+}
+
+void case_nine() { // Case One
+    
+}
+
+void case_ten() { // Case Two
+    
+}
+
+void case_eleven() { // Case One
+    
+}
+
+void case_twelve() { // Case Two
+    
+}
+
+void case_thirteen() { // Case One
+    
+}
+
+void case_fourteen() { // Case Two
+    
+}
+
+void case_fifteen() { // Case One
+    
+}
+
+void case_sixteen() { // Case Two
+    
+}
+
+void case_seventeen() { // Case One
+    
+}
+
+void case_eighteen() { // Case Two
+    
+}
+
+void case_nineteen() { // Case One
+    
+}
+
+void case_twenty() { // Case Two
+    
+}
+
+void case_twentyone() { // Case One
+    
+}
+
+void case_twentytwo() { // Case Two
+    
+}
+
+void case_twentythree() { // Case One
+    
+}
+
+void case_twentyfour() { // Case Two
+    
+}
+
 
 int main() {
     try {
@@ -96,6 +162,24 @@ int main() {
         case_four();
         case_five();
         case_six();
+        // case_seven();
+        // case_eight();
+        // case_nine();
+        // case_ten();
+        // case_eleven();
+        // case_twelve();
+        // case_thirteen();
+        // case_fourteen();
+        // case_fifteen();
+        // case_sixteen();
+        // case_seventeen();
+        // case_eighteen();
+        // case_nineteen();
+        // case_twenty();
+        // case_twentyone();
+        // case_twentytwo();
+        // case_twentythree();
+        // case_twentyfour();
     }
     catch(std::exception& e) {
         std::cerr << e.what() << std::endl;
