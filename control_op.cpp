@@ -2,6 +2,7 @@
 #include "constants.h"
 
 #include <stdexcept>
+#include <iostream>
 
 short halt() {
 	return MEMORY_SIZE;

@@ -2,8 +2,8 @@
 #define CONTROL_OP_H
 
 short halt();
-short branchNeg(short& accumulator, unsigned short& cur_addr, short& potential_addr);
-short branchZero(short& accumulator, unsigned short& cur_addr, short& potential_addr);
-short branch(short& mem_addr);
+short branchNeg(short& accumulator, unsigned short& cur_addr, short& br_target);
+short branchZero(short& accumulator, unsigned short& cur_addr, short& br_target);
+short branch(short& br_target);
 
 #endif
