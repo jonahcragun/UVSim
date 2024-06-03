@@ -19,6 +19,7 @@ public:
     unsigned short execute_op(short op_code, short mem_addr, short cur);
     short& get_accumulator();
     short* get_memory();
+    short get_memory_value(short mem_addr);
     void set_accumulator(short value);
     void set_memory_address(short mem_addr, short value);
     void run();

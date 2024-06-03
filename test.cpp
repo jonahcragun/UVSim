@@ -3,6 +3,8 @@
 #include "constants.h"
 #include "arithmetic_op.h"
 #include "control_op.h"
+#include "memory_op.h"
+#include "io_op.h"
 #include <stdexcept>
 
 using std::exception;
@@ -119,29 +121,89 @@ void case_six() { // Branch Case Two
                         std::out_of_range);
 }
 
-void case_seven() { // Case One
+void case_seven() { // Branch Negative Case One
+    short br_target = 12;
+    uvsim.set_accumulator(-5); // Set accumulator to a negative value
+    TEST("CASE 7.1: Testing UVSim execute_op function with branch negative opcode to correctly return the target memory address.",
+         uvsim.execute_op(41, br_target, 0) == br_target);
 
+    TEST_FUNCTION("CASE 7.2: Testing branchNeg function to correctly return the target memory address when accumulator is negative.",
+                  branchNeg(uvsim.get_accumulator(), 0, br_target));
+
+    short result = branchNeg(uvsim.get_accumulator(), 0, br_target);
+    TEST("CASE 7.3: Testing branchNeg result is equal to expected result.",
+         result == br_target,
+         "Failed to return the expected value of " + std::to_string(br_target) + ", got: " + std::to_string(result));
 }
 
-void case_eight() { // Case Two
 
+void case_eight() { // Branch Negative Case Two
+    short out_of_range_addr = MEMORY_SIZE + 1;
+    uvsim.set_accumulator(-5); // Set accumulator to a negative value
+    EXCEPTION_TEST_FUNC("CASE 8: Testing UVSim execute_op function with branch negative opcode to correctly throw an error when index out of range.",
+                        uvsim.execute_op(41, out_of_range_addr, 0),
+                        std::out_of_range);
 }
 
-void case_nine() { // Case One
 
+void case_nine() { // Branch Zero Case One
+    short br_target = 12;
+    uvsim.set_accumulator(0); // Set accumulator to zero
+    TEST("CASE 9.1: Testing UVSim execute_op function with branch zero opcode to correctly return the target memory address.",
+         uvsim.execute_op(42, br_target, 0) == br_target);
+
+    TEST_FUNCTION("CASE 9.2: Testing branchZero function to correctly return the target memory address when accumulator is zero.",
+                  branchZero(uvsim.get_accumulator(), 0, br_target));
+
+    short result = branchZero(uvsim.get_accumulator(), 0, br_target);
+    TEST("CASE 9.3: Testing branchZero result is equal to expected result.",
+         result == br_target,
+         "Failed to return the expected value of " + std::to_string(br_target) + ", got: " + std::to_string(result));
 }
 
-void case_ten() { // Case Two
 
+void case_ten() { // Branch Zero Case Two
+    short out_of_range_addr = MEMORY_SIZE + 1;
+    uvsim.set_accumulator(0); // Set accumulator to zero
+    EXCEPTION_TEST_FUNC("CASE 10: Testing UVSim execute_op function with branch zero opcode to correctly throw an error when index out of range.",
+                        uvsim.execute_op(42, out_of_range_addr, 0),
+                        std::out_of_range);
 }
 
-void case_eleven() { // Case One
 
+void case_eleven() { // Store Case One
+    short* memory = uvsim.get_memory();
+    short mem_addr = 5;
+    short value_to_store = 10;
+    uvsim.set_accumulator(value_to_store);
+    TEST_FUNCTION("CASE 11.1: Testing UVSim execute_op function with store opcode to correctly store the accumulator value.",
+                  uvsim.execute_op(21, mem_addr, 0));
+
+    short stored_value = uvsim.get_memory_value(mem_addr);
+    TEST("CASE 11.2: Testing stored value in memory is equal to the accumulator value.",
+         stored_value == value_to_store,
+         "Failed to store the expected value of " + std::to_string(value_to_store) + ", got: " + std::to_string(stored_value));
+
+    uvsim.set_accumulator(value_to_store);
+    TEST_FUNCTION("CASE 11.3: Testing store function to correctly store the accumulator value in memory",
+                  store(uvsim.get_accumulator(), memory, mem_addr));
+
+    stored_value = uvsim.get_memory_value(mem_addr);
+    TEST("CASE 11.4: Testing store function result is equal to expected result.",
+         stored_value == value_to_store,
+         "Failed to store the expected value of " + std::to_string(value_to_store) + ", got: " + std::to_string(stored_value));
 }
 
-void case_twelve() { // Case Two
 
+void case_twelve() { // Store Case Two
+    short out_of_range_addr = MEMORY_SIZE + 1;
+    short value_to_store = 10;
+    uvsim.set_accumulator(value_to_store);
+    EXCEPTION_TEST_FUNC("CASE 12: Testing UVSim execute_op function with store opcode to correctly throw an error when index out of range.",
+                        uvsim.execute_op(21, out_of_range_addr, 0),
+                        std::out_of_range);
 }
+
 
 void case_thirteen() { // Case One
 
@@ -191,10 +253,10 @@ void case_twentyfour() { // Case Two
 
 }
 
-// COMPILE COMMAND: g++ -o test test.cpp uvsim.cpp arithmetic_op.cpp control_op.cpp
-// RUN COMMAND: ./test.out
+// COMPILE COMMAND: g++ -o test test.cpp uvsim.cpp arithmetic_op.cpp control_op.cpp memory_op.cpp
+// RUN COMMAND: (Linux, MacOS) ./test.out  (Windows) test.exe
 int main() {
-    //TestHandler::get_instance().set_verbose(true); // Comment out this line if you want to see only failed tests
+    TestHandler::get_instance().set_verbose(true); // Comment out this line if you want to see only failed tests
 
     int total_tests = 24;
     for (int i = 1; i <= total_tests; (TEST_REPORT(i), CLEAR_RESULTS(), ++i)) {

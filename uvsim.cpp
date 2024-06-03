@@ -130,26 +130,35 @@ unsigned short UVSim::execute_op(short op_code, short mem_addr, short cur) {
 }
 
 // Get accumulator value
-short& UVSim::get_accumulator(){
+short& UVSim::get_accumulator() {
     return accumulator;
 }
 
 // Get memory array
-short* UVSim::get_memory(){
+short* UVSim::get_memory() {
     return main_memory;
 }
 
-// Set accumulator to a specific value
-void UVSim::set_accumulator(short value){
-    accumulator = value;
+// Get memory value at a specific location
+short UVSim::get_memory_value(short mem_addr) {
+    if (mem_addr < 0 || mem_addr >= MEMORY_SIZE) {
+        throw std::out_of_range("GET_MEMORY_VALUE Error: Memory address " + std::to_string(mem_addr) + " is out of range.");
+    }
+    return main_memory[mem_addr];
 }
 
 // Set memory at a specific location
-void UVSim::set_memory_address(short mem_addr, short value){
+void UVSim::set_memory_address(short mem_addr, short value) {
     if (mem_addr < 0 || mem_addr >= MEMORY_SIZE) {
         throw runtime_error("Memory address out of bounds");
     }
     main_memory[mem_addr] = value;
+}
+
+
+// Set accumulator to a specific value
+void UVSim::set_accumulator(short value) {
+    accumulator = value;
 }
 
 // Start VM, get user input for file name, load into memory, and execute program
