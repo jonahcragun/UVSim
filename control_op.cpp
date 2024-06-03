@@ -9,7 +9,7 @@ short halt() {
 }
 
 // If the accumulator is a negative value, return to the potential memory address. Else return the current memory address incremented
-short branchNeg(short& accumulator, unsigned short& cur_addr, short& br_target) {
+short branchNeg(short& accumulator, short cur_addr, short br_target) {
     if (br_target < 0 || br_target >= MEMORY_SIZE) {
         throw std::out_of_range("BRANCHNEG Error: Memory address " + std::to_string(br_target) + " is out of range.");
     }
@@ -17,7 +17,7 @@ short branchNeg(short& accumulator, unsigned short& cur_addr, short& br_target) 
 }
 
 // If the accumulator equals zero, return to the potential memory address. Else return the current memory address incremented
-short branchZero(short& accumulator, unsigned short& cur_addr, short& br_target){
+short branchZero(short& accumulator, short cur_addr, short br_target){
     if (br_target < 0 || br_target >= MEMORY_SIZE) {
         throw std::out_of_range("BRANCHZERO Error: Memory address " + std::to_string(br_target) + " is out of range.");
     }
@@ -25,7 +25,7 @@ short branchZero(short& accumulator, unsigned short& cur_addr, short& br_target)
 }
 
 // Return the memory address to switch the current memory address
-short branch(short& br_target) {
+short branch(short br_target) {
     if (br_target < 0 || br_target >= MEMORY_SIZE) {
         throw std::out_of_range("BRANCH Error: Memory address " + std::to_string(br_target) + " is out of range.");
     }

@@ -11,6 +11,7 @@ int main() {
 	// run UVSim
 	try {
 		UVSim run_prog;
+        run_prog.run();
 	}
 	catch(exception& e) {
 		cerr << e.what() << endl;

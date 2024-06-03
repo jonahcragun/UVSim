@@ -14,10 +14,15 @@ private:
     void read_file();
     void execute();
     void split_instr(short instr, short* op_code, short* mem_addr);
-    unsigned short execute_op(short op_code, short mem_addr, unsigned short cur);
-    void run();
 
 public:
+    unsigned short execute_op(short op_code, short mem_addr, short cur);
+    short& get_accumulator();
+    short* get_memory();
+    void set_accumulator(short value);
+    void set_memory_address(short mem_addr, short value);
+    void run();
+
     UVSim();
 };
 

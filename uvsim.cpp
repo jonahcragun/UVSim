@@ -67,12 +67,12 @@ void UVSim::execute() {
 // Param 3: pointer to mem addr value
 void UVSim::split_instr(short instr, short* op_code, short* mem_addr) {
     *op_code = instr / 100;
-    *mem_addr = instr - (*op_code * 100);
+    *mem_addr = instr % 100;
 }
 
 // Execute operation associated with op code
 // Return next memory address to run
-unsigned short UVSim::execute_op(short op_code, short mem_addr, unsigned short cur) {
+unsigned short UVSim::execute_op(short op_code, short mem_addr, short cur) {
     // 10: READ
     if (op_code == 10) {
         read(accumulator, main_memory, mem_addr);
@@ -119,7 +119,7 @@ unsigned short UVSim::execute_op(short op_code, short mem_addr, unsigned short c
     }
         // 43: HALT
     else if (op_code == 43) {
-        cur = halt();
+        return halt();
     }
         // INVALID OPCODE
     else {
@@ -129,14 +129,36 @@ unsigned short UVSim::execute_op(short op_code, short mem_addr, unsigned short c
     return ++cur;
 }
 
+// Get accumulator value
+short& UVSim::get_accumulator(){
+    return accumulator;
+}
+
+// Get memory array
+short* UVSim::get_memory(){
+    return main_memory;
+}
+
+// Set accumulator to a specific value
+void UVSim::set_accumulator(short value){
+    accumulator = value;
+}
+
+// Set memory at a specific location
+void UVSim::set_memory_address(short mem_addr, short value){
+    if (mem_addr < 0 || mem_addr >= MEMORY_SIZE) {
+        throw runtime_error("Memory address out of bounds");
+    }
+    main_memory[mem_addr] = value;
+}
+
 // Start VM, get user input for file name, load into memory, and execute program
 void UVSim::run() {
-    reset_memory();
     read_file();
     execute();
 }
 
 // Constructor, runs UVSim on creation
 UVSim::UVSim() {
-    run();
+    reset_memory();
 }

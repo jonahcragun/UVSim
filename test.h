@@ -31,6 +31,7 @@ void case_twentyfour();
 #include <functional>
 #include <vector>
 #include <typeinfo>
+#include <stdexcept>
 
 using std::size_t;
 
@@ -46,6 +47,11 @@ struct TestResult {
 // Class to handle unit testing
 class TestHandler {
 public:
+    static TestHandler& get_instance() {
+        static TestHandler instance;
+        return instance;
+    }
+
     void set_verbose(bool verbose) {
         this->verbose = verbose;
     }
@@ -59,57 +65,102 @@ public:
         }
     }
 
-    void exception_test(const std::string& description, const std::function<void()>& testFunction, const std::string& expectedException, const std::string& fileName, long lineNumber) {
+    template<typename Func, typename... Args>
+    void function_test(const std::string& description, Func testFunction, const std::string& fileName, long lineNumber, Args&&... args) {
         try {
-            testFunction();
-            add_test(description + " (expected exception not thrown)", "Exception not thrown", false, fileName, lineNumber);
+            std::invoke(testFunction, std::forward<Args>(args)...);
+            add_test(description, "", true, fileName, lineNumber);
         } catch (const std::exception& e) {
-            if (std::string(typeid(e).name()) == expectedException) {
-                add_test(description + " (expected exception thrown)", "", true, fileName, lineNumber);
-            } else {
-                add_test(description + " (unexpected exception thrown)", "Unexpected exception: " + std::string(e.what()), false, fileName, lineNumber);
-            }
+            add_test(description, "Exception thrown: " + std::string(e.what()), false, fileName, lineNumber);
         } catch (...) {
-            add_test(description + " (non-standard exception thrown)", "Non-standard exception", false, fileName, lineNumber);
+            add_test(description, "Non-standard exception", false, fileName, lineNumber);
         }
     }
 
-    void generate_report() const {
+    template<typename ExceptionType, typename Func, typename... Args>
+    void exception_test_func(const std::string& description, Func testFunction, const std::string& fileName, long lineNumber, Args&&... args) {
+        try {
+            std::invoke(testFunction, std::forward<Args>(args)...);
+            TestHandler::get_instance().add_test(description, "Exception not thrown. ", false, fileName, lineNumber);
+        } catch (const ExceptionType&) {
+            TestHandler::get_instance().add_test(description, "", true, fileName, lineNumber);
+        } catch (const std::exception& e) {
+            TestHandler::get_instance().add_test(description, "Unexpected exception: " + std::string(e.what()), false, fileName, lineNumber);
+        } catch (...) {
+            TestHandler::get_instance().add_test(description, "Non-standard exception", false, fileName, lineNumber);
+        }
+    }
+
+    template<typename ExceptionType>
+    void exception_test_conditional(const std::string& description, bool condition, const std::string& throwMessage, const std::string& fileName, long lineNumber) {
+        auto testFunction = [condition, throwMessage]() {
+            if (!condition)
+                throw ExceptionType(throwMessage);
+        };
+        exception_test_func<ExceptionType>(description, testFunction, fileName, lineNumber);
+    }
+
+    void generate_report(int num) const {
         if (verbose) {
             for (const auto& result : tests) {
-                std::cout << (result.passed ? "PASS" : "FAIL") << ": " << result.testDescription << "\n"
-                          << (result.passed ? "" : "\t" + result.failureMessage) << "\n"
-                          << "\tin file " << result.fileName << " on line " << result.lineNumber << std::endl;
+                std::cout << (result.passed ? "PASSED: " : "FAILED: ") << "Test in file " << result.fileName << " on line " << result.lineNumber
+                          << " {\n\t\tDESCRIPTION: '" << result.testDescription << (result.passed ? "'" : "'\n\t\tERROR MESSAGE: " + result.failureMessage)
+                          << "\n\t}\n" << std::endl;
+            }
+        } else {
+            for (const auto& result : tests) {
+                if (!result.passed) {
+                    std::cout << "FAILED: Test in file " << result.fileName << " on line " << result.lineNumber << " {" << "\n\t\tDESCRIPTION: '" << result.testDescription
+                              << "'\n\t\tERROR MESSAGE: " << result.failureMessage << "\n\t}\n" << std::endl;
+                }
             }
         }
-        std::cout << "\nTest Report:\n\n";
+        std::cout << "\nUnit test " << (num > 0 ? std::to_string(num) + " " : "") << "Report:\n";
         std::cout << "\tPassed: " << passedTests << std::endl;
-        std::cout << "\tFailed: " << failedTests << std::endl;
+        std::cout << "\tFailed: " << failedTests << std::endl << std::endl;
+    }
+
+    void clear_results() {
+        tests.clear();
+        passedTests = 0;
+        failedTests = 0;
     }
 
 private:
+    TestHandler() = default;
     std::vector<TestResult> tests;
     size_t passedTests{0};
     size_t failedTests{0};
     bool verbose{false};
 };
 
-// Test scafolding user calls TEST, TEST_WITH_FAILURE_MSG, EXCEPTION_TEST, and TEST_REPORT
-// Create an instance of TestHandler
-extern TestHandler testHandler;
+// MACRO Structure:
+// TEST : param 1: Description of the test, param 2: Condition to test, param 3: Failure message
+// FUNCTION_TEST : param 1: Description of the test, param 2: Function to test
+// EXCEPTION_TEST_FUNC : param 1: Description of the test, param 2: Function to test, param 3: Expected exception
+// EXCEPTION_TEST_COND : param 1: Description of the test, param 2: Condition to test, param 3: Expected exception
+// TEST_REPORT : takes an optional integer parameter, Generates a test report for all tests run and not cleared
+// CLEAR_RESULTS : takes no parameters, Clears all test results
 
-// Macros for adding a test
-#define TEST(description, condition) \
-    testHandler.add_test(description, "", condition, __FILE__, __LINE__)
+// Macros for adding a test, uses variadic macros (... and __VA_ARGS__) to allow for a custom failure message (Defaults to an empty string if no message is provided)
+#define TEST(description, condition, ...) \
+    TestHandler::get_instance().add_test(description, "" __VA_ARGS__, condition, __FILE__, __LINE__)
 
-#define TEST_WITH_FAILURE_MSG(description, condition, failureMessage) \
-    testHandler.add_test(description, failureMessage, condition, __FILE__, __LINE__)
+// Macros for adding a function test
+#define TEST_FUNCTION(description, testFunction, ...) \
+    TestHandler::get_instance().function_test(description, [&]() { testFunction; }, __FILE__, __LINE__, ##__VA_ARGS__) // ##__VA_ARGS__ is used to allow for an empty variadic macro
 
-// Macro for adding an exception test
-#define EXCEPTION_TEST(description, testFunction, expectedException) \
-    testHandler.exception_test(description, testFunction, typeid(expectedException).name(), __FILE__, __LINE__)
+// Macro for adding an exception test for functions
+#define EXCEPTION_TEST_FUNC(description, testFunction, expectedException, ...) \
+    TestHandler::get_instance().exception_test_func<expectedException>(description, [&]() { testFunction; }, __FILE__, __LINE__, ##__VA_ARGS__) // ##__VA_ARGS__ is used to allow for an empty variadic macro
+
+// Macro for adding an exception test for conditions
+#define EXCEPTION_TEST_COND(description, condition, expectedException, ...) \
+    TestHandler::get_instance().exception_test_conditional<expectedException>(description, condition, "" __VA_ARGS__, __FILE__, __LINE__)
 
 // Macro for generating a test report
-#define TEST_REPORT testHandler.generate_report()
+#define TEST_REPORT(...) TestHandler::get_instance().generate_report(__VA_ARGS__)
 
-#endif
+#define CLEAR_RESULTS() TestHandler::get_instance().clear_results()
+
+#endif // TEST_H
