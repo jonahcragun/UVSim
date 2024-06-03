@@ -205,23 +205,79 @@ void case_twelve() { // Store Case Two
 }
 
 
-void case_thirteen() { // Case One
+void case_thirteen() { // Load Case One
+    short* memory = uvsim.get_memory();
+    short mem_addr = 1;
+    short value_to_load = 25;
+
+    // Set the memory address with the value load
+    TEST_FUNCTION("CASE 13.0: Testing UVsim execute_op function with load opcode, confirming run without error.",
+        uvsim.execute_op(20, mem_addr, 0));
+    short loaded_value = uvsim.get_accumulator();
+    TEST("CASE 13.1: Testing loaded value in accumulator is equal to the value in memory.",
+        loaded_value == value_to_load,
+        "Failed to load expected value of " + std::to_string(value_to_load)+ ", got: " + std::to_string(loaded_value));
+    
+}
+
+void case_fourteen() { // Load Case Two
+    short out_of_range_addre = MEMORY_SIZE + 1;
+    EXCEPTION_TEST_FUNC("CASE 14: Testing UVsim execute_op function with load opcode to correctly throw an error when index out of range.",
+        uvsim.execute_op(20, out_of_range_addr, 0),
+        std::out_of_range);
 
 }
 
-void case_fourteen() { // Case Two
+void case_fifteen() { // Divide Case One
+    short dividend = 10;
+    short divisor = 2;
+    short expected_quotient = 5;
 
+    uvsim.set_accumulator(dividend);
+    
+    TEST_FUNCTION("CASE 15.0 Testing UVsim execute_op function with opcode, confirming run without error.",
+        uvsim.execute_op(32, divisor, 0));
+    
+    short quotient_from_execute_op = uvsim.get_accumulator();
+    TEST("CASE 15.1: Testing quotient of UVsim execute_op is equal to expected quotient.",
+        quotient_from_execute_op == expected_quotient,
+        "Failed to obtain the exepected quotient of 5 using Uvsim execute_op, got: " + std::to_string(quotient_from_execute_op));
+    
+    short accumulator_befoer_divide = dividend;
+    divide(accumulator_befoer_divide, divisor);
+
+    short quotient_from_divide_function = accumulator_before_divide;
+    TEST("CASE 15.2: Testing quotient obtained from custom divide function is equla to the expected quotient.",
+        quotient_from_execute_op == expected_quotient,
+        "Failed to obtain the exepected quotient of 5 using Uvsim execute_op, got: " + std::to_string(quotient_from_execute_op));
+    
+    TEST("CASE 15.3: Comparing UVsim execute_op and divide function results.",
+        quotient_from_execute_op == expected_quotient,
+        "Failes comparison of quotient obtained from Uvsim execute and divide function.");
+    
 }
 
-void case_fifteen() { // Case One
-
+void case_sixteen() { // Divide Case Two
+    short dividend  = 10;
+    short divisor = 0;
+    uvsim.set_accumulator(dividend);
+    EXCEPTION_TEST_FUNC("CASE 16: Testing UVsim execute_op function with divide opcode throw an error when dividing by zero.",
+        uvsim.execute_op(32, divisor, 0),
+        std::runtime_error);
+    
 }
 
-void case_sixteen() { // Case Two
+void case_seventeen() { // Multiply Case One
+    short multiplicand = 5;
+    short multiplier = 3;
+    short expected_product = 15;
 
-}
-
-void case_seventeen() { // Case One
+    uvsim.set_accumulator(multiplicand);
+    TEST_FUNCTION("CASE 17.0: Testing Uvsim execute_op function with multiply opcode, confirming run without error.",
+        uvsim.execute_op(33, multiplier, 0));
+    
+    short product = uvsim.get_accumulator();
+  
 
 }
 
