@@ -143,49 +143,49 @@ UVSim is designed to be user-friendly and educational, making it an ideal tool f
 1. Return a value greater than the size of addressable memory.
 
 ### Use Case 10
-- **ACTOR**: 
+- **ACTOR**: Load Algorithm
 
 
-- **SYSTEM**: 
+- **SYSTEM**: Memory Management System
 
 
-- **GOAL**: 
+- **GOAL**: Load the value from a specific memory location into the accumulator.
 
 
 - **STEPS**:
-1. 
-2. 
-3. 
+1. Check if the provided memory address(mem_addr) is within the valid range.
+2. Load the value from the specified memmory address into the accumulator
+   
 
 ### Use Case 11
-- **ACTOR**: 
+- **ACTOR**: Divide Algorithm
 
 
-- **SYSTEM**: 
+- **SYSTEM**: Arithmetic System
 
 
-- **GOAL**: 
+- **GOAL**: Divide the number in the accumulator by the number at the provided memory address.
 
 
 - **STEPS**:
-1. 
-2. 
-3. 
+1. Get the number from the provided memory address.
+2. If the number is zero, throw a division by zero error.
+3. Divide the number in the accumulator by the number from the provided memory address.
 
 ### Use Case 12
-- **ACTOR**: 
+- **ACTOR**: Multiply Algorithm
 
 
-- **SYSTEM**: 
+- **SYSTEM**: Arithmetic System
 
 
-- **GOAL**: 
+- **GOAL**: Multiply the number in the accumulator by the number at the provided memory address.
 
 
 - **STEPS**:
-1. 
-2. 
-3. 
+1. Get the number from the provided memory address.
+2. Multiply the number in the accumulator by the number from the provided memory address.
+
 
 ## Unit Tests Spreadsheet
 
