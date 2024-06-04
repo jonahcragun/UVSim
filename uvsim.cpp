@@ -75,11 +75,11 @@ void UVSim::split_instr(short instr, short* op_code, short* mem_addr) {
 unsigned short UVSim::execute_op(short op_code, short mem_addr, short cur) {
     // 10: READ
     if (op_code == 10) {
-        read(accumulator, main_memory, mem_addr);
+        read(std::cin, main_memory, mem_addr);
     }
         // 11: WRITE
     else if (op_code == 11) {
-        write(accumulator, main_memory, mem_addr);
+        write(std::cout, main_memory, mem_addr);
     }
         // 20: LOAD
     else if (op_code == 20) {
