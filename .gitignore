@@ -1,9 +1,13 @@
-
 .idea/
-
-milestones/~$unitTestCoverage.xlsx
-
-milestones/ms_1/~$lestone1-MeetingReports.docx
-
+# excel files
+*.xlsx
+# output files
 *.out
+# executables
 *.exe
+# vim swap files
+*.swp
+# test compiled file
+test
+# compiled make file
+UVSim
