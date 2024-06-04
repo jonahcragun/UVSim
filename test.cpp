@@ -239,41 +239,41 @@ void case_thirteen() { // Load Case One
 }
 
 void case_fourteen() { // Load Case Two
-    // short out_of_range_addre = MEMORY_SIZE + 1;
-    // EXCEPTION_TEST_FUNC("CASE 14: Testing UVsim execute_op function with load opcode to correctly throw an error when index out of range.",
-    //     uvsim.execute_op(20, out_of_range_addr, 0),
-    //     std::out_of_range);
+    short out_of_range_addre = MEMORY_SIZE + 1;
+    EXCEPTION_TEST_FUNC("CASE 14: Testing UVsim execute_op function with load opcode to correctly throw an error when index out of range.",
+        uvsim.execute_op(20, out_of_range_addr, 0),
+        std::out_of_range);
 
 }
 
 void case_fifteen() { // Divide Case One
-    // short* memory = uvsim.get_memory();
-    // short mem_addr = 7;
-    // short expected_result = 2;
+    short* memory = uvsim.get_memory();
+    short mem_addr = 7;
+    short expected_result = 2;
 
-    // uvsim.set_memory_address(mem_addr, 10);
-    // uvsim.set_accumulator(20);
+    uvsim.set_memory_address(mem_addr, 10);
+    uvsim.set_accumulator(20);
 
-    // TEST_FUNTION("CASE 15.0: Testing Uvsim execute_op function with divide opcode, confirming run without error.",
-    //     uvusim.execute_op(32, mem_addr, 0));
-    // 
-    // short result1 = uvsim.get_accumulator();
-    // TEST("CASE 15.1: Testing division result of UVsim execute_op is equla to expected result.",
-    //     result1 == expected_result,
-    //     "Failed to return the expected value of 2, got: " + std::to_string(result1));
-    // uvsim.set_accumulator(20);
+    TEST_FUNTION("CASE 15.0: Testing Uvsim execute_op function with divide opcode, confirming run without error.",
+        uvusim.execute_op(32, mem_addr, 0));
+    
+    short result1 = uvsim.get_accumulator();
+    TEST("CASE 15.1: Testing division result of UVsim execute_op is equla to expected result.",
+        result1 == expected_result,
+        "Failed to return the expected value of 2, got: " + std::to_string(result1));
+    uvsim.set_accumulator(20);
 
-    // TEST_FUNCTION("CASE 15.2: Testing divide function is correctly dividing from memory",
-    //     divide(uvsim.get_accumulator(), memory, mem_addr));
+    TEST_FUNCTION("CASE 15.2: Testing divide function is correctly dividing from memory",
+        divide(uvsim.get_accumulator(), memory, mem_addr));
 
-    // short result2 = uvsim.get_accumulator();
-    // TEST("CASE 15.3: Testing division result of divide function is equal to expected result.",
-    //     result1 == result2,
-    //     "Failed to return the expected value of 2, got: " + std::to_string(result2));
-    // 
-    // TEST("CASE 15.4: comparing Uvsim execute_op and divide functiom results.",
-    //     result1 == result2,
-    //     "Failed comparsion of " + std::to_string(result1) + " and " + std::to_string(result2) + ".");
+    short result2 = uvsim.get_accumulator();
+    TEST("CASE 15.3: Testing division result of divide function is equal to expected result.",
+        result1 == result2,
+        "Failed to return the expected value of 2, got: " + std::to_string(result2));
+    
+    TEST("CASE 15.4: comparing Uvsim execute_op and divide functiom results.",
+        result1 == result2,
+        "Failed comparsion of " + std::to_string(result1) + " and " + std::to_string(result2) + ".");
 
 }
 
@@ -318,16 +318,16 @@ void case_seventeen() { // Multiply Case One
 }
 
 void case_eighteen() { // Multiply Case Two
-    // short out_of_range_addr = MEMORY_SIZE + 1;
-    // short memory[10];
-    // short temp_accumulator = 10;
-    // 
-    // EXCEPTION_TEST_FUNC("CASE 18: Testing UVSim execution_op function multiply opcode will correctly throw an error when index out of range.",
-    //     uvsim.execute_op(33, out_of_range_addr, 0),
-    //     std::out_of_range);
-    // EXCEPTION_TEST_FUCTION("CASE 18.1: Testing UVSim execution_op function multiply opcode will correctly throw an error when index out of range.",
-    //     multiply(temp_accumulator, memory, out_of_range_addr),
-    //     std::out_of_range);
+    short out_of_range_addr = MEMORY_SIZE + 1;
+    short memory[10];
+    short temp_accumulator = 10;
+    
+    EXCEPTION_TEST_FUNC("CASE 18: Testing UVSim execution_op function multiply opcode will correctly throw an error when index out of range.",
+        uvsim.execute_op(33, out_of_range_addr, 0),
+        std::out_of_range);
+    EXCEPTION_TEST_FUCTION("CASE 18.1: Testing UVSim execution_op function multiply opcode will correctly throw an error when index out of range.",
+        multiply(temp_accumulator, memory, out_of_range_addr),
+        std::out_of_range);
 }
 
 void case_nineteen() { // Read Case One
