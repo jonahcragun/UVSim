@@ -7,10 +7,10 @@ UVSim is designed to be user-friendly and educational, making it an ideal tool f
 
 ## User Stories
 ### User Story 1
-- As a ____, I want ____ so that ____.
+- As a student, I want to execute machine language programs so that I can learn the language BasicML.
 
 ### User Story 2
-- As a ____, I want ____ so that ____.
+- As a educational company, I want have good learning tools so that our students can be taught effectively.
 
 ## Use Cases
 ### Use Case 1
