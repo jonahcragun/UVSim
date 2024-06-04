@@ -211,12 +211,28 @@ void case_thirteen() { // Load Case One
     short value_to_load = 25;
 
     // Set the memory address with the value load
+    uvsim.set_memory_address(mem_addr, value_to_load);
+    
     TEST_FUNCTION("CASE 13.0: Testing UVsim execute_op function with load opcode, confirming run without error.",
         uvsim.execute_op(20, mem_addr, 0));
+    
     short loaded_value = uvsim.get_accumulator();
     TEST("CASE 13.1: Testing loaded value in accumulator is equal to the value in memory.",
         loaded_value == value_to_load,
         "Failed to load expected value of " + std::to_string(value_to_load)+ ", got: " + std::to_string(loaded_value));
+
+    short accumulator_before_load = 0;
+    load(accumulator_before_load, memory, mem_addr);
+
+    short value_from_load_function = accumulator_before_load;
+    TEST("CASE 13.2: Testing loaded value using custom load function is equal to the value in memory.",
+        value_from_load_function == value_to_load,
+        "Failed comparsion of loaded values of " + std::to_string(value_to_load) + " ,got: " + std::to_striing(value_from_load_function));
+
+    TEST("CASE 13.3: comparing UVsim execute_op and load function reults.",
+        loaded_value == value_from_load_function,
+        "Failed to load expected values obtained from execute_op and custom load function.");
+    
     
 }
 
@@ -229,60 +245,87 @@ void case_fourteen() { // Load Case Two
 }
 
 void case_fifteen() { // Divide Case One
-    short dividend = 10;
-    short divisor = 2;
-    short expected_quotient = 5;
+    short* memory = uvsim.get_memory();
+    short mem_addr = 7;
+    short expected_result = 2;
 
-    uvsim.set_accumulator(dividend);
-    
-    TEST_FUNCTION("CASE 15.0 Testing UVsim execute_op function with opcode, confirming run without error.",
-        uvsim.execute_op(32, divisor, 0));
-    
-    short quotient_from_execute_op = uvsim.get_accumulator();
-    TEST("CASE 15.1: Testing quotient of UVsim execute_op is equal to expected quotient.",
-        quotient_from_execute_op == expected_quotient,
-        "Failed to obtain the exepected quotient of 5 using Uvsim execute_op, got: " + std::to_string(quotient_from_execute_op));
-    
-    short accumulator_befoer_divide = dividend;
-    divide(accumulator_befoer_divide, divisor);
+    uvsim.set_memory_address(mem_addr, 10);
+    uvsim.set_accumulator(20);
 
-    short quotient_from_divide_function = accumulator_before_divide;
-    TEST("CASE 15.2: Testing quotient obtained from custom divide function is equla to the expected quotient.",
-        quotient_from_execute_op == expected_quotient,
-        "Failed to obtain the exepected quotient of 5 using Uvsim execute_op, got: " + std::to_string(quotient_from_execute_op));
+    TEST_FUNTION("CASE 15.0: Testing Uvsim execute_op function with divide opcode, confirming run without error.",
+        uvusim.execute_op(32, mem_addr, 0));
     
-    TEST("CASE 15.3: Comparing UVsim execute_op and divide function results.",
-        quotient_from_execute_op == expected_quotient,
-        "Failes comparison of quotient obtained from Uvsim execute and divide function.");
+    short result1 = uvsim.get_accumulator();
+    TEST("CASE 15.1: Testing division result of UVsim execute_op is equla to expected result.",
+        result1 == expected_result,
+        "Failed to return the expected value of 2, got: " + std::to_string(result1));
+    uvsim.set_accumulator(20);
+
+    TEST_FUNCTION("CASE 15.2: Testing divide function is correctly dividing from memory",
+        divide(uvsim.get_accumulator(), memory, mem_addr));
+
+    short result2 = uvsim.get_accumulator();
+    TEST("CASE 15.3: Testing division result of divide function is equal to expected result.",
+        result1 == result2,
+        "Failed to return the expected value of 2, got: " + std::to_string(result2));
     
+    TEST("CASE 15.4: comparing Uvsim execute_op and divide functiom results.",
+        result1 == result2,
+        "Failed comparsion of " + std::to_string(result1) + " and " + std::to_string(result2) + ".");
+
 }
 
 void case_sixteen() { // Divide Case Two
-    short dividend  = 10;
-    short divisor = 0;
-    uvsim.set_accumulator(dividend);
+
+    short mem_addr = 0;
+    
     EXCEPTION_TEST_FUNC("CASE 16: Testing UVsim execute_op function with divide opcode throw an error when dividing by zero.",
-        uvsim.execute_op(32, divisor, 0),
+        uvsim.execute_op(32, mem_addr, 0),
         std::runtime_error);
     
 }
 
 void case_seventeen() { // Multiply Case One
-    short multiplicand = 5;
-    short multiplier = 3;
-    short expected_product = 15;
+    short* memory = uvsim.get_memory();
+    short mem_addr = 6;
+    short expected_result = 50;
 
-    uvsim.set_accumulator(multiplicand);
-    TEST_FUNCTION("CASE 17.0: Testing Uvsim execute_op function with multiply opcode, confirming run without error.",
-        uvsim.execute_op(33, multiplier, 0));
-    
-    short product = uvsim.get_accumulator();
-  
+    uvsim.set_memory_address(mem_addr, 5);
+    uvsim.set_accumulator(10);
+    TEST_FUNCTION("CASE 17.0: Testing UVSim execution_op function with multiply opcode, confirming run without error.",
+                  uvsim.execute_op(33, mem_addr, 0));
+
+    short result1 = uvsim.get_accumulator();
+    TEST("CASE 17.1: Testing multiplication result of UVSim execution_op is equal to expected result.",
+         result1 == expected_result,
+         "Failed to return the expected value of 50, got: " + std::to_string(result1));
+
+    uvsim.set_accumulator(10);
+    TEST_FUNCTION("CASE 17.2: Testing multiply function is correctly multiplying from memory",
+                  multiply(uvsim.get_accumulator(), memory, mem_addr));
+
+    short result2 = uvsim.get_accumulator();
+    TEST("CASE 17.3: Testing multiplication result of multiply function is equal to expected result.",
+         result2 == expected_result,
+         "Failed to return the expected value of 50, got: " + std::to_string(result2));
+
+    TEST("CASE 17.4: Comparing UVSim execution_op and multiply function results.",
+         result1 == result2,
+         "Failed comparison of " + std::to_string(result1) + " and " + std::to_string(result2) + ".");
 
 }
 
-void case_eighteen() { // Case Two
-
+void case_eighteen() { // Multiply Case Two
+    short out_of_range_addr = MEMORY_SIZE + 1;
+    short memory[10];
+    short temp_accumulator = 10;
+    
+    EXCEPTION_TEST_FUNC("CASE 18: Testing UVSim execution_op function multiply opcode will correctly throw an error when index out of range.",
+        uvsim.execute_op(33, out_of_range_addr, 0),
+        std::out_of_range);
+    EXCEPTION_TEST_FUCTION("CASE 18.1: Testing UVSim execution_op function multiply opcode will correctly throw an error when index out of range.",
+        multiply(temp_accumulator, memory, out_of_range_addr),
+        std::out_of_range);
 }
 
 void case_nineteen() { // Case One
