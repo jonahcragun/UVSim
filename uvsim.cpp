@@ -52,7 +52,7 @@ void UVSim::read_file() {
 // Run program starting at memory location 00
 void UVSim::execute() {
     unsigned short cur = 0;
-    while (cur < MEMORY_SIZE) {
+    while (cur < MEMORY_SIZE && cur >= 0) {
         short op_code;
         short mem_addr;
 

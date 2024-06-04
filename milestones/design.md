@@ -100,49 +100,47 @@ UVSim is designed to be user-friendly and educational, making it an ideal tool f
 2. Store the value in the accumulator at the specified memory address.
 
 ### Use Case 7
-- **ACTOR**: 
+- **ACTOR**: Read Algorithm
 
 
-- **SYSTEM**: 
+- **SYSTEM**: I/O System
 
 
-- **GOAL**: 
+- **GOAL**: read in a value from the terminal into a specified location in memory.
 
 
 - **STEPS**:
-1. 
-2. 
-3. 
+1. Check that memory location is within a valid range.
+2. Wait for user input.
+3. Store value into specifed memory location after the enter key has been read.
 
 ### Use Case 8
-- **ACTOR**: 
+- **ACTOR**: Write Algorithm
 
 
-- **SYSTEM**: 
+- **SYSTEM**: I/O System
 
 
-- **GOAL**: 
+- **GOAL**: Write value to the console from specified memory location. 
 
 
 - **STEPS**:
-1. 
-2. 
-3. 
+1. Check that memory loaction is within a valid range.
+2. Get value from specified memory address.
+3. Write value to the terminal.
 
 ### Use Case 9
-- **ACTOR**: 
+- **ACTOR**: Halt Algorithm
 
 
-- **SYSTEM**: 
+- **SYSTEM**: Control System
 
 
-- **GOAL**: 
+- **GOAL**: Stop the program from running.
 
 
 - **STEPS**:
-1. 
-2. 
-3. 
+1. Return a value greater than the size of addressable memory.
 
 ### Use Case 10
 - **ACTOR**: 
