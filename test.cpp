@@ -8,6 +8,7 @@
 #include <stdexcept>
 #include <sstream>
 #include <iostream>
+#include <fstream>
 
 using std::exception;
 
@@ -391,12 +392,79 @@ void case_twentyfour() { // Halt Case Two
 		"'execute_op(43, 0, 0)' returned incorrect index, expected: " + std::to_string(MEMORY_SIZE) + ", found: " + std::to_string(uvs.execute_op(43, 0, 0)));
 }
 
+void case_twentyfive() { // File Case One
+    std::ifstream file_test1("test_pass_1.txt");
+
+    TEST("Testing that a file was opened successfully",
+         file_test1.is_open(),
+        "File did not open as expected.");
+
+    std::string file_text;
+    std::string line;
+    while (std::getline(file_test1, line)) {
+        file_text += line + "\n";
+    }
+
+    TEST("Testing that text was read from the file",
+        file_text > "",
+        "File text did not match expected text.");
+
+    file_test1.close();
+
+    TEST("Testing that a file was closed successfully",
+         file_test1.is_open() == false,
+         "File did not close as expected.");
+    
+    std::ifstream file_test2("test_pass_1.txt");
+
+    TEST_FUNCTION("Testing UVSim read_from_stream function with a file stream",
+                  uvsim.read_from_stream(file_test2, uvsim.get_memory()));
+
+    TEST("Testing that a file was opened successfully",
+         file_test2.is_open(),
+         "File did not open as expected.");
+    
+    file_test2.close();
+
+    TEST("Testing that a file was closed successfully",
+         file_test2.is_open() == false,
+         "File did not close as expected.");
+}
+
+void case_twentysix() { // File Case Two
+    std::ifstream file("test_fail_1.txt");
+
+    TEST("Testing that a file was opened successfully",
+        file.is_open(),
+        "File did not open as expected.");
+
+    EXCEPTION_TEST_FUNC("Testing UVSim read_from_stream function with a file stream that has an invalid format will throw an error",
+        uvsim.read_from_stream(file, uvsim.get_memory()),
+        std::runtime_error);
+
+    file.close();
+}
+
+void case_twentyseven() { // File Case Three
+    std::ifstream file("test_fail_missing.txt");
+
+    TEST("Testing that a missing file will throw an error",
+        file.fail(),
+        "File did not fail to open as expected.");
+
+    EXCEPTION_TEST_FUNC("Testing UVSim read_from_stream function with a missing file will throw an error",
+        uvsim.read_from_stream(file, uvsim.get_memory()),
+        std::runtime_error);
+
+    file.close();
+}
+
 // COMPILE COMMAND: g++ -o test test.cpp uvsim.cpp arithmetic_op.cpp control_op.cpp memory_op.cpp
 // RUN COMMAND: (Linux, MacOS) ./test.out  (Windows) test.exe
 int main() {
     TestHandler::get_instance().set_verbose(true); // Comment out this line if you want to see only failed tests
 
-    int total_tests = 24;
+    int total_tests = 27;
     for (int i = 1; i <= total_tests; (TEST_REPORT(i), CLEAR_RESULTS(), ++i)) {
         switch (i) {
             case 1:
@@ -470,6 +538,15 @@ int main() {
                 break;
             case 24:
                  case_twentyfour();
+                break;
+            case 25:
+                case_twentyfive();
+                break;
+            case 26:
+                case_twentysix();
+                break;
+            case 27:
+                case_twentyseven();
                 break;
             default:
                 break;

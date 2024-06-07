@@ -1,0 +1,5 @@
++0000  ADDR 0
+err1 at line 2  ADDR 1 will cause a runtime error
+-1111  ADDR 2 would write value at address 11 to screen
+err2 at line 4  ADDR 3 will cause a runtime error
+-4300  ADDR 4 Halt

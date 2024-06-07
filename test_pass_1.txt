@@ -1,0 +1,10 @@
++1007  ADDR 0 Read user input to address 7
+-1008  ADDR 1 Read user input to address 8
+-2007  ADDR 2 Load value at address 7 to accumulator
++2008  ADDR 3 Load value at address 8 to accumulator
+-2109  ADDR 4 Store value in accumulator to address 9
++1109  ADDR 5 Write value at address 9 to screen
++4300  ADDR 6 Halt
+-0000  ADDR 7
++0000  ADDR 8
++0000  ADDR 9

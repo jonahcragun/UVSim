@@ -10,13 +10,6 @@
 #include <string>
 #include <stdexcept>
 
-using std::cin;
-using std::cout;
-using std::ifstream;
-using std::runtime_error;
-using std::string;
-using std::to_string;
-
 // Reset memory to 0
 void UVSim::reset_memory() {
     for (short& mem_addr : main_memory) {
@@ -24,29 +17,67 @@ void UVSim::reset_memory() {
     }
 }
 
-// Read in file to memory starting at location 00
-void UVSim::read_file() {
-    string file;
-    cout << "Enter a BasicML file name: ";
-    cin >> file;
-
-    ifstream ifs(file);
-
-    // check if file is valid
-    if (!ifs) {
-        throw runtime_error("Invalid file entered");
+void UVSim::read_from_stream(std::istream& is, short* main_memory) {
+    if (!is) {
+        throw std::runtime_error("READ_FILE Error: Invalid file entered");
     }
 
-    string word;
+    std::string line;
     unsigned short i = 0;
 
-    while (getline(ifs, word)) {
+    while (std::getline(is, line)) {
         if (i > MEMORY_SIZE - 1)
-            throw runtime_error("File is too long: cannot exceed " + std::to_string(MEMORY_SIZE) + " lines");
+            throw std::runtime_error("READ_FILE Error: File is too long: cannot exceed " + std::to_string(MEMORY_SIZE) + " lines");
 
-        main_memory[i] = stoi(word);
+        if (line.empty()) {
+            continue;
+        } else if (line.length() > 4) {
+            if (line[0] == '-' || line[0] == '+')
+                line = line.substr(0, 5); // Only keep the first 5 characters
+            else
+                line = line.substr(0, 4); // Only keep the first 4 characters
+        }
+
+        try {
+            for (int j = 0; j < line.length(); ++j) {
+                char c = line[j];
+                if (j == 0 && (c == '-' || c == '+')) {
+                    continue;
+                }
+                if (!isdigit(c)) {
+                    throw std::runtime_error("READ_FILE Error: Invalid format '" + line + "' at line " + std::to_string(i));
+                }
+            }
+            main_memory[i] = std::stoi(line);
+        } catch (const std::invalid_argument& e) {
+            throw std::runtime_error("READ_FILE Error: Invalid format '" + line + "' at line " + std::to_string(i));
+        }
+
         ++i;
     }
+}
+
+// Read in file to memory starting at location 00
+void UVSim::read_file() {
+    std::string file;
+    std::cout << "Enter a BasicML file name: ";
+    std::cin >> file;
+
+    std::ifstream ifs(file);
+
+    // Check if file is valid
+    if (!ifs) {
+        throw std::runtime_error("READ_FILE Error: Invalid file entered");
+    }
+
+    // Check if file is empty
+    if (ifs.peek() == std::ifstream::traits_type::eof()) {
+        throw std::runtime_error("READ_FILE Error: File is empty");
+    }
+
+    read_from_stream(ifs, main_memory);
+
+    ifs.close();
 }
 
 // Run program starting at memory location 00
@@ -66,6 +97,7 @@ void UVSim::execute() {
 // Param 2: pointer to op code value
 // Param 3: pointer to mem addr value
 void UVSim::split_instr(short instr, short* op_code, short* mem_addr) {
+    instr = abs(instr);
     *op_code = instr / 100;
     *mem_addr = instr % 100;
 }
@@ -75,7 +107,15 @@ void UVSim::split_instr(short instr, short* op_code, short* mem_addr) {
 unsigned short UVSim::execute_op(short op_code, short mem_addr, short cur) {
     // 10: READ
     if (op_code == 10) {
-        read(std::cin, main_memory, mem_addr);
+        while (true) {
+            try {
+                std::cout << "Enter a number: ";
+                read(std::cin, main_memory, mem_addr);
+                break;
+            } catch (const std::exception &e) {
+                std::cout << e.what() << "' please enter an integer." << std::endl;
+            }
+        }
     }
         // 11: WRITE
     else if (op_code == 11) {
@@ -123,8 +163,7 @@ unsigned short UVSim::execute_op(short op_code, short mem_addr, short cur) {
     }
         // INVALID OPCODE
     else {
-        string e = "Invalid op code at address: " + to_string(cur);
-        throw runtime_error(e);
+        throw std::runtime_error("EXECUTE_OP Warning | Line " + std::to_string(cur) + ": Unexpected value '" + std::to_string(op_code) + std::to_string(mem_addr) + "' in instruction memory.");
     }
     return ++cur;
 }
@@ -150,7 +189,7 @@ short UVSim::get_memory_value(short mem_addr) {
 // Set memory at a specific location
 void UVSim::set_memory_address(short mem_addr, short value) {
     if (mem_addr < 0 || mem_addr >= MEMORY_SIZE) {
-        throw runtime_error("Memory address out of bounds");
+        throw std::out_of_range("SET_MEMORY_VALUE Error: Memory address " + std::to_string(mem_addr) + " is out of range.");
     }
     main_memory[mem_addr] = value;
 }

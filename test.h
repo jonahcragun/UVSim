@@ -101,23 +101,23 @@ public:
     }
 
     void generate_report(int num) const {
+        std::cout << "\nUnit test " << (num > 0 ? std::to_string(num) + " " : "") << "Report:\n";
+        std::cout << "\tPassed: " << passedTests << std::endl;
+        std::cout << "\tFailed: " << failedTests << std::endl << std::endl;
         if (verbose) {
             for (const auto& result : tests) {
                 std::cout << (result.passed ? "PASSED: " : "FAILED: ") << "Test in file " << result.fileName << " on line " << result.lineNumber
                           << " {\n\t\tDESCRIPTION: '" << result.testDescription << (result.passed ? "'" : "'\n\t\tERROR MESSAGE: " + result.failureMessage)
-                          << "\n\t}\n" << std::endl;
+                          << "\n\t}\n" << std::endl << std::endl;
             }
         } else {
             for (const auto& result : tests) {
                 if (!result.passed) {
                     std::cout << "FAILED: Test in file " << result.fileName << " on line " << result.lineNumber << " {" << "\n\t\tDESCRIPTION: '" << result.testDescription
-                              << "'\n\t\tERROR MESSAGE: " << result.failureMessage << "\n\t}\n" << std::endl;
+                              << "'\n\t\tERROR MESSAGE: " << result.failureMessage << "\n\t}\n" << std::endl << std::endl;
                 }
             }
         }
-        std::cout << "\nUnit test " << (num > 0 ? std::to_string(num) + " " : "") << "Report:\n";
-        std::cout << "\tPassed: " << passedTests << std::endl;
-        std::cout << "\tFailed: " << failedTests << std::endl << std::endl;
     }
 
     void clear_results() {
