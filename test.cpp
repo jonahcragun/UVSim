@@ -418,7 +418,7 @@ void case_twentyfive() { // File Case One
     std::ifstream file_test2("test_pass_1.txt");
 
     TEST_FUNCTION("Testing UVSim read_from_stream function with a file stream",
-                  uvsim.read_from_stream(file_test2, uvsim.get_memory()));
+                  uvsim.input.read_from_stream(file_test2, uvsim.get_memory()));
 
     TEST("Testing that a file was opened successfully",
          file_test2.is_open(),
@@ -439,7 +439,7 @@ void case_twentysix() { // File Case Two
         "File did not open as expected.");
 
     EXCEPTION_TEST_FUNC("Testing UVSim read_from_stream function with a file stream that has an invalid format will throw an error",
-        uvsim.read_from_stream(file, uvsim.get_memory()),
+        uvsim.input.read_from_stream(file, uvsim.get_memory()),
         std::runtime_error);
 
     file.close();
@@ -453,7 +453,7 @@ void case_twentyseven() { // File Case Three
         "File did not fail to open as expected.");
 
     EXCEPTION_TEST_FUNC("Testing UVSim read_from_stream function with a missing file will throw an error",
-        uvsim.read_from_stream(file, uvsim.get_memory()),
+        uvsim.input.read_from_stream(file, uvsim.get_memory()),
         std::runtime_error);
 
     file.close();

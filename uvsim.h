@@ -2,7 +2,7 @@
 #define UVSIM_H
 
 #include "constants.h"
-#include <iostream>
+#include "uvsim_input.h"
 
 // UVSim VM that interprets BasicML (a simple machine language)
 // has a memory array and accumulator register
@@ -10,14 +10,12 @@ class UVSim {
 private:
     short main_memory[MEMORY_SIZE];
     short accumulator;
-
     void reset_memory();
-    void read_file();
     void execute();
     void split_instr(short instr, short* op_code, short* mem_addr);
 
 public:
-    void read_from_stream(std::istream& is, short* main_memory);
+    UVSim_Input input;
     unsigned short execute_op(short op_code, short mem_addr, short cur);
     short& get_accumulator();
     short* get_memory();
