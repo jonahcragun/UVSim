@@ -10,6 +10,7 @@
 #include <fstream>
 #include <string>
 #include <stdexcept>
+#include <vector>
 
 // Reset memory to 0
 void UVSim::reset_memory() {
@@ -38,6 +39,41 @@ void UVSim::split_instr(short instr, short* op_code, short* mem_addr) {
     instr = abs(instr);
     *op_code = instr / 100;
     *mem_addr = instr % 100;
+}
+
+void UVSim::parse_file(std::vector<std::string>& lines) {
+    if (lines.size() > 100) {
+        throw std::runtime_error("READ_FILE Error: File is too long: cannot exceed " + std::to_string(MEMORY_SIZE) + " lines");
+    }
+    int i = 0;
+    for (auto line : lines) {
+        if (line.empty()) {
+            continue;
+        }
+        else if (line.length() > 4) {
+            if (line[0] == '-' || line[0] == '+')
+                line = line.substr(0, 5); // Only keep the first 5 characters
+            else
+                line = line.substr(0, 4); // Only keep the first 4 characters
+        }
+
+        try {
+            for (int j = 0; j < line.length(); ++j) {
+                char c = line[j];
+                if (j == 0 && (c == '-' || c == '+')) {
+                    continue;
+                }
+                if (!isdigit(c)) {
+                    throw std::runtime_error("READ_FILE Error: Invalid format '" + line + "' at line " + std::to_string(i));
+                }
+            }
+            main_memory[i] = std::stoi(line);
+        } 
+        catch (const std::invalid_argument& e) {
+            throw std::runtime_error("READ_FILE Error: Invalid format '" + line + "' at line " + std::to_string(i));
+        }
+        i++;
+    }
 }
 
 // Execute operation associated with op code
@@ -140,7 +176,8 @@ void UVSim::set_accumulator(short value) {
 
 // Start VM, get user input for file name, load into memory, and execute program
 void UVSim::run() {
-    input.read_file(main_memory);
+    std::vector<std::string> lines = input.read_file(main_memory);
+    parse_file(lines);
     execute();
 }
 

@@ -7,8 +7,8 @@
 class UVSim_Input{
 public:
     
-    void read_file(short* main_memory);
-    void read_from_stream(std::istream& is, short* main_memory);
+    std::vector<std::string> read_file(short* main_memory);
+    std::vector<std::string> read_from_stream(std::istream& is, short* main_memory);
 
 };
 
