@@ -13,6 +13,7 @@ private:
     void reset_memory();
     void execute();
     void split_instr(short instr, short* op_code, short* mem_addr);
+    void parse_file(std::vector<std::string>& lines);
 
 public:
     UVSim_Input input;
