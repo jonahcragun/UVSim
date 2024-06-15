@@ -41,6 +41,8 @@ void UVSim::split_instr(short instr, short* op_code, short* mem_addr) {
     *mem_addr = instr % 100;
 }
 
+// Put instructions into memory. Only accept 4 digits and sign.
+// Param 1: Vector of full lines from the file
 void UVSim::parse_file(std::vector<std::string>& lines) {
     if (lines.size() > 100) {
         throw std::runtime_error("READ_FILE Error: File is too long: cannot exceed " + std::to_string(MEMORY_SIZE) + " lines");
