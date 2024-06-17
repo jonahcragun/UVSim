@@ -7,4 +7,5 @@ void multiply(short& accumulator, short* main_memory, short mem_addr);
 void add(short& accumulator, short* main_memory, short mem_addr);
 void subtract(short& accumulator, short* main_memory, short mem_addr);
 
+void checkOverflow(short& accumulator);
 #endif
