@@ -178,7 +178,7 @@ void UVSim::set_accumulator(short value) {
 
 // Start VM, get user input for file name, load into memory, and execute program
 void UVSim::run() {
-    std::vector<std::string> lines = input.read_file(main_memory);
+    std::vector<std::string> lines = input.read_file();
     parse_file(lines);
     execute();
 }
