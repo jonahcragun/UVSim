@@ -14,7 +14,7 @@ void checkOverflow(short& accumulator) {
         accumulator = accumulator % 10000;
     }
 }
-x
+
 // Divide the value in the memory to the accumulator
 void divide(short& accumulator, short* main_memory, short mem_addr) {
     if (mem_addr < 0 || mem_addr >= MEMORY_SIZE) {
