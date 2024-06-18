@@ -10,14 +10,11 @@
 
 // Function to check for overflow
 void checkOverflow(short& accumulator) {
-    if (accumulator > 9999) {
-        accumulator = 9999;
-    }
-    else if (accumulator < -9999) {
-        accumulator = -9999;
+    if (accumulator < -9999 || accumulator > 9999) {
+        accumulator = accumulator % 10000;
     }
 }
-
+x
 // Divide the value in the memory to the accumulator
 void divide(short& accumulator, short* main_memory, short mem_addr) {
     if (mem_addr < 0 || mem_addr >= MEMORY_SIZE) {
