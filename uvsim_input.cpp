@@ -11,7 +11,6 @@ std::vector<std::string> UVSim_Input::read_from_stream(std::istream& is){
     }
 
     std::string line;
-    unsigned short i = 0;
     std::vector<std::string> lines;
     while (std::getline(is, line)) {
         lines.push_back(line);

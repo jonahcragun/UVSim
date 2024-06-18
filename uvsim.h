@@ -9,7 +9,7 @@
 class UVSim {
 private:
     short main_memory[MEMORY_SIZE];
-    short accumulator;
+    short accumulator = 0;
     void reset_memory();
     void execute();
     void split_instr(short instr, short* op_code, short* mem_addr);
