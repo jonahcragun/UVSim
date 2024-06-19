@@ -4,16 +4,16 @@
 #include "memory_op.h"
 #include "arithmetic_op.h"
 #include "control_op.h"
-#include "uvsim_input.h"
 
 #include <iostream>
 #include <fstream>
+#include <vector>
 #include <string>
 #include <stdexcept>
-#include <vector>
 
 // Reset memory to 0
 void UVSim::reset_memory() {
+    accumulator = 0;
     for (short& mem_addr : main_memory) {
         mem_addr = 0;
     }
@@ -43,7 +43,7 @@ void UVSim::split_instr(short instr, short* op_code, short* mem_addr) {
 
 // Put instructions into memory. Only accept 4 digits and sign.
 // Param 1: Vector of full lines from the file
-void UVSim::parse_file(std::vector<std::string>& lines) {
+void UVSim::parse_input(std::vector<std::string>& lines) {
     if (lines.size() > 100) {
         throw std::runtime_error("READ_FILE Error: File is too long: cannot exceed " + std::to_string(MEMORY_SIZE) + " lines");
     }
@@ -176,14 +176,13 @@ void UVSim::set_accumulator(short value) {
     accumulator = value;
 }
 
-// Start VM, get user input for file name, load into memory, and execute program
-void UVSim::run() {
-    std::vector<std::string> lines = input.read_file();
-    parse_file(lines);
+// Start VM, loads passed vector<string> into memory, and executes the program
+void UVSim::run(std::vector<std::string> instr_lines) {
+    parse_input(instr_lines);
     execute();
 }
 
-// Constructor, runs UVSim on creation
+// Constructor, resets memory and accumulator on creation
 UVSim::UVSim() {
     reset_memory();
 }

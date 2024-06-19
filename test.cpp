@@ -1,5 +1,6 @@
 #include "test.h"
 #include "uvsim.h"
+#include "uvsim_input.h"
 #include "constants.h"
 #include "arithmetic_op.h"
 #include "control_op.h"
@@ -13,6 +14,7 @@
 using std::exception;
 
 UVSim uvsim;
+UVSim_Input input_handler;
 /*
 Reference to be able to call the execute_op( opcode, mem_addr, cur_addr) function
 OPCODES:
@@ -417,8 +419,8 @@ void case_twentyfive() { // File Case One
     
     std::ifstream file_test2("test_pass_1.txt");
 
-    TEST_FUNCTION("Testing UVSim read_from_stream function with a file stream",
-                  uvsim.input.read_from_stream(file_test2, uvsim.get_memory()));
+    TEST_FUNCTION("Testing UVSim_input split_lines function with a file stream",
+                  input_handler.split_lines(file_test2));
 
     TEST("Testing that a file was opened successfully",
          file_test2.is_open(),
@@ -438,9 +440,9 @@ void case_twentysix() { // File Case Two
         file.is_open(),
         "File did not open as expected.");
 
-    EXCEPTION_TEST_FUNC("Testing UVSim read_from_stream function with a file stream that has an invalid format will throw an error",
-        uvsim.input.read_from_stream(file, uvsim.get_memory()),
-        std::runtime_error);
+    EXCEPTION_TEST_FUNC("Testing runnning UVSim.run(vector<string>) with UVSim_input split_lines function with a file stream that has an invalid format will throw an error",
+                        uvsim.run(input_handler.split_lines(file)),
+                        std::runtime_error);
 
     file.close();
 }
@@ -452,17 +454,17 @@ void case_twentyseven() { // File Case Three
         file.fail(),
         "File did not fail to open as expected.");
 
-    EXCEPTION_TEST_FUNC("Testing UVSim read_from_stream function with a missing file will throw an error",
-        uvsim.input.read_from_stream(file, uvsim.get_memory()),
-        std::runtime_error);
+    EXCEPTION_TEST_FUNC("Testing UVSim_input split_lines function with a missing file will throw an error",
+                        input_handler.split_lines(file),
+                        std::runtime_error);
 
     file.close();
 }
 
-// COMPILE COMMAND: g++ -o test test.cpp uvsim.cpp arithmetic_op.cpp control_op.cpp memory_op.cpp
+// COMPILE COMMAND: g++ -o test test.cpp uvsim.cpp uvsim_input.cpp arithmetic_op.cpp control_op.cpp memory_op.cpp
 // RUN COMMAND: (Linux, MacOS) ./test.out  (Windows) test.exe
 int main() {
-    TestHandler::get_instance().set_verbose(true); // Comment out this line if you want to see only failed tests
+//    TestHandler::get_instance().set_verbose(true); // Comment out this line if you want to see only failed tests
 
     int total_tests = 27;
     for (int i = 1; i <= total_tests; (TEST_REPORT(i), CLEAR_RESULTS(), ++i)) {

@@ -34,7 +34,7 @@ void read(std::istream& is, short (&main_memory)[SIZE], short mem_addr) {
                 continue;
             }
             if (!isdigit(c)) {
-                throw std::runtime_error("READ_FILE Error: Invalid format '" + input);
+                throw std::runtime_error("READ Error: Invalid format '" + input);
             }
         }
         main_memory[mem_addr] = std::stoi(input);

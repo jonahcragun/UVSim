@@ -5,7 +5,7 @@
 #include <stdexcept>
 #include <vector>
 
-std::vector<std::string> UVSim_Input::read_from_stream(std::istream& is){
+std::vector<std::string> UVSim_Input::split_lines(std::istream& is){
     if (!is) {
         throw std::runtime_error("READ_FILE Error: Invalid file entered");
     }
@@ -19,7 +19,7 @@ std::vector<std::string> UVSim_Input::read_from_stream(std::istream& is){
 };
 
 
-std::vector<std::string> UVSim_Input::read_file(){
+std::vector<std::string> UVSim_Input::prompt_console_file_input(){
     std::string file;
     std::cout << "Enter a BasicML file name: ";
     std::cin >> file;
@@ -36,7 +36,7 @@ std::vector<std::string> UVSim_Input::read_file(){
         throw std::runtime_error("READ_FILE Error: File is empty");
     }
 
-    std::vector<std::string> lines = read_from_stream(ifs);
+    std::vector<std::string> lines = split_lines(ifs);
 
     ifs.close();
     return lines;
