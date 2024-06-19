@@ -1,5 +1,5 @@
 #include "uvsim.h"
-#include "uvsim_input.h"
+#include "console_input.h"
 
 #include <iostream>
 #include <stdexcept>
@@ -8,11 +8,10 @@
 int main() {
 	// run UVSim
 	try {
-        UVSim_Input input;
-        UVSim run_prog;
+        ConsoleInputHandler input_handler;
+        UVSim run_prog(&input_handler);
 
-        std::vector<std::string> instructions = input.prompt_console_file_input();
-        run_prog.run(instructions);
+        run_prog.run();
 	}
 	catch(std::exception& e) {
         std::cerr << e.what() << std::endl;

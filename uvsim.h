@@ -2,6 +2,7 @@
 #define UVSIM_H
 
 #include "constants.h"
+#include "input_handler.h"
 #include <vector>
 #include <string>
 
@@ -11,6 +12,9 @@ class UVSim {
 private:
     short main_memory[MEMORY_SIZE];
     short accumulator;
+
+    InputHandler* input_handler;
+//    OutputHandler* output_handler;
 
     void reset_memory();
     void execute();
@@ -25,9 +29,9 @@ public:
 
     void set_accumulator(short value);
     void set_memory_address(short mem_addr, short value);
-    void run(std::vector<std::string> instr_lines);
+    void run();
 
-    UVSim();
+    UVSim(InputHandler* handler_in);
 };
 
 #endif

@@ -5,7 +5,7 @@
 #include <string>
 #include <stdexcept>
 
-// read word from terminal into specified memory index of main_memory
+// read word into specified memory index of main_memory
 template <size_t SIZE>
 void read(std::istream& is, short (&main_memory)[SIZE], short mem_addr) {
     if (mem_addr < 0 || mem_addr >= SIZE) {

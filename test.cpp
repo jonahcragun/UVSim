@@ -1,6 +1,6 @@
 #include "test.h"
 #include "uvsim.h"
-#include "uvsim_input.h"
+#include "console_input.h"
 #include "constants.h"
 #include "arithmetic_op.h"
 #include "control_op.h"

@@ -6,7 +6,6 @@
 #include "control_op.h"
 
 #include <iostream>
-#include <fstream>
 #include <vector>
 #include <string>
 #include <stdexcept>
@@ -22,7 +21,7 @@ void UVSim::reset_memory() {
 // Run program starting at memory location 00
 void UVSim::execute() {
     unsigned short cur = 0;
-    while (cur < MEMORY_SIZE && cur >= 0) {
+    while (cur < MEMORY_SIZE) {
         short op_code;
         short mem_addr;
 
@@ -85,8 +84,7 @@ unsigned short UVSim::execute_op(short op_code, short mem_addr, short cur) {
     if (op_code == 10) {
         while (true) {
             try {
-                std::cout << "Enter a number: ";
-                read(std::cin, main_memory, mem_addr);
+                read(input_handler->get_user_input(), main_memory, mem_addr);
                 break;
             } catch (const std::exception &e) {
                 std::cout << e.what() << "' please enter an integer." << std::endl;
@@ -157,7 +155,8 @@ short* UVSim::get_memory() {
 // Get memory value at a specific location
 short UVSim::get_memory_value(short mem_addr) {
     if (mem_addr < 0 || mem_addr >= MEMORY_SIZE) {
-        throw std::out_of_range("GET_MEMORY_VALUE Error: Memory address " + std::to_string(mem_addr) + " is out of range.");
+        throw std::out_of_range("GET_MEMORY_VALUE Error: Memory address " + std::to_string(mem_addr)
+        + " is out of range.");
     }
     return main_memory[mem_addr];
 }
@@ -165,7 +164,8 @@ short UVSim::get_memory_value(short mem_addr) {
 // Set memory at a specific location
 void UVSim::set_memory_address(short mem_addr, short value) {
     if (mem_addr < 0 || mem_addr >= MEMORY_SIZE) {
-        throw std::out_of_range("SET_MEMORY_VALUE Error: Memory address " + std::to_string(mem_addr) + " is out of range.");
+        throw std::out_of_range("SET_MEMORY_VALUE Error: Memory address " + std::to_string(mem_addr)
+        + " is out of range.");
     }
     main_memory[mem_addr] = value;
 }
@@ -177,12 +177,13 @@ void UVSim::set_accumulator(short value) {
 }
 
 // Start VM, loads passed vector<string> into memory, and executes the program
-void UVSim::run(std::vector<std::string> instr_lines) {
+void UVSim::run() {
+    std::vector<std::string> instr_lines = input_handler->get_instructions();
     parse_input(instr_lines);
     execute();
 }
 
 // Constructor, resets memory and accumulator on creation
-UVSim::UVSim() {
+UVSim::UVSim(InputHandler* handler_in) : input_handler(handler_in) {
     reset_memory();
 }
