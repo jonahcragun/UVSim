@@ -4,16 +4,15 @@
 #include "memory_op.h"
 #include "arithmetic_op.h"
 #include "control_op.h"
-#include "uvsim_input.h"
 
 #include <iostream>
-#include <fstream>
+#include <vector>
 #include <string>
 #include <stdexcept>
-#include <vector>
 
 // Reset memory to 0
 void UVSim::reset_memory() {
+    accumulator = 0;
     for (short& mem_addr : main_memory) {
         mem_addr = 0;
     }
@@ -22,7 +21,7 @@ void UVSim::reset_memory() {
 // Run program starting at memory location 00
 void UVSim::execute() {
     unsigned short cur = 0;
-    while (cur < MEMORY_SIZE && cur >= 0) {
+    while (cur < MEMORY_SIZE) {
         short op_code;
         short mem_addr;
 
@@ -43,11 +42,11 @@ void UVSim::split_instr(short instr, short* op_code, short* mem_addr) {
 
 // Put instructions into memory. Only accept 4 digits and sign.
 // Param 1: Vector of full lines from the file
-void UVSim::parse_file(std::vector<std::string>& lines) {
+void UVSim::parse_input(std::vector<std::string>& lines) {
     if (lines.size() > 100) {
         throw std::runtime_error("READ_FILE Error: File is too long: cannot exceed " + std::to_string(MEMORY_SIZE) + " lines");
     }
-    int i = 0;
+    size_t i = 0;
     for (auto line : lines) {
         if (line.empty()) {
             continue;
@@ -60,7 +59,7 @@ void UVSim::parse_file(std::vector<std::string>& lines) {
         }
 
         try {
-            for (int j = 0; j < line.length(); ++j) {
+            for (size_t j = 0; j < line.length(); ++j) {
                 char c = line[j];
                 if (j == 0 && (c == '-' || c == '+')) {
                     continue;
@@ -85,17 +84,16 @@ unsigned short UVSim::execute_op(short op_code, short mem_addr, short cur) {
     if (op_code == 10) {
         while (true) {
             try {
-                std::cout << "Enter a number: ";
-                read(std::cin, main_memory, mem_addr);
+                read(input_handler->get_user_input(), main_memory, mem_addr);
                 break;
             } catch (const std::exception &e) {
-                std::cout << e.what() << "' please enter an integer." << std::endl;
+                *output_handler << e.what() << "' please enter an integer." << std::endl << std::endl;
             }
         }
     }
         // 11: WRITE
     else if (op_code == 11) {
-        write(std::cout, main_memory, mem_addr);
+        write(*output_handler, main_memory, mem_addr);
     }
         // 20: LOAD
     else if (op_code == 20) {
@@ -157,7 +155,8 @@ short* UVSim::get_memory() {
 // Get memory value at a specific location
 short UVSim::get_memory_value(short mem_addr) {
     if (mem_addr < 0 || mem_addr >= MEMORY_SIZE) {
-        throw std::out_of_range("GET_MEMORY_VALUE Error: Memory address " + std::to_string(mem_addr) + " is out of range.");
+        throw std::out_of_range("GET_MEMORY_VALUE Error: Memory address " + std::to_string(mem_addr)
+        + " is out of range.");
     }
     return main_memory[mem_addr];
 }
@@ -165,7 +164,8 @@ short UVSim::get_memory_value(short mem_addr) {
 // Set memory at a specific location
 void UVSim::set_memory_address(short mem_addr, short value) {
     if (mem_addr < 0 || mem_addr >= MEMORY_SIZE) {
-        throw std::out_of_range("SET_MEMORY_VALUE Error: Memory address " + std::to_string(mem_addr) + " is out of range.");
+        throw std::out_of_range("SET_MEMORY_VALUE Error: Memory address " + std::to_string(mem_addr)
+        + " is out of range.");
     }
     main_memory[mem_addr] = value;
 }
@@ -176,14 +176,14 @@ void UVSim::set_accumulator(short value) {
     accumulator = value;
 }
 
-// Start VM, get user input for file name, load into memory, and execute program
+// Start VM, loads passed vector<string> into memory, and executes the program
 void UVSim::run() {
-    std::vector<std::string> lines = input.read_file();
-    parse_file(lines);
+    std::vector<std::string> instr_lines = input_handler->get_instructions();
+    parse_input(instr_lines);
     execute();
 }
 
-// Constructor, runs UVSim on creation
-UVSim::UVSim() {
+// Constructor, resets memory and accumulator on creation
+UVSim::UVSim(InputHandler* handler_in, OutputHandler* hanlder_out) : input_handler(handler_in), output_handler(hanlder_out) {
     reset_memory();
 }

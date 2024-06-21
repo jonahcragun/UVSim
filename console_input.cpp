@@ -1,25 +1,15 @@
-#include "uvsim_input.h"
+#include "console_input.h"
 #include <iostream>
 #include <fstream>
-#include <string>
 #include <stdexcept>
 #include <vector>
 
-std::vector<std::string> UVSim_Input::read_from_stream(std::istream& is){
-    if (!is) {
-        throw std::runtime_error("READ_FILE Error: Invalid file entered");
-    }
+std::istream& ConsoleInputHandler::get_user_input(){
+    std::cout << "Enter a number: ";
+    return std::cin;
+}
 
-    std::string line;
-    std::vector<std::string> lines;
-    while (std::getline(is, line)) {
-        lines.push_back(line);
-    }
-    return lines;
-};
-
-
-std::vector<std::string> UVSim_Input::read_file(){
+std::vector<std::string> ConsoleInputHandler::get_instructions(){
     std::string file;
     std::cout << "Enter a BasicML file name: ";
     std::cin >> file;
@@ -36,7 +26,7 @@ std::vector<std::string> UVSim_Input::read_file(){
         throw std::runtime_error("READ_FILE Error: File is empty");
     }
 
-    std::vector<std::string> lines = read_from_stream(ifs);
+    std::vector<std::string> lines = split_lines(ifs);
 
     ifs.close();
     return lines;
