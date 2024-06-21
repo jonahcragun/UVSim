@@ -2,9 +2,6 @@
 #define CONSOLE_INPUT_H
 
 #include "input_handler.h"
-#include <iostream>
-#include <vector>
-#include <string>
 
 class ConsoleInputHandler : public InputHandler {
 public:

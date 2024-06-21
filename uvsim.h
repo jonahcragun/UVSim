@@ -3,6 +3,7 @@
 
 #include "constants.h"
 #include "input_handler.h"
+#include "output_handler.h"
 #include <vector>
 #include <string>
 
@@ -14,7 +15,7 @@ private:
     short accumulator;
 
     InputHandler* input_handler;
-//    OutputHandler* output_handler;
+    OutputHandler* output_handler;
 
     void reset_memory();
     void execute();
@@ -31,7 +32,7 @@ public:
     void set_memory_address(short mem_addr, short value);
     void run();
 
-    UVSim(InputHandler* handler_in);
+    UVSim(InputHandler* handler_in, OutputHandler* handler_out);
 };
 
 #endif

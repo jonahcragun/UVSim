@@ -1,5 +1,6 @@
 #include "uvsim.h"
 #include "console_input.h"
+#include "console_output.h"
 
 #include <iostream>
 #include <stdexcept>
@@ -7,14 +8,16 @@
 
 int main() {
 	// run UVSim
+    ConsoleInputHandler input_handler;
+    ConsoleOutputHandler output_handler;
+
 	try {
-        ConsoleInputHandler input_handler;
-        UVSim run_prog(&input_handler);
+        UVSim run_prog(&input_handler, &output_handler);
 
         run_prog.run();
 	}
 	catch(std::exception& e) {
-        std::cerr << e.what() << std::endl;
+        output_handler << e.what() << std::endl;
 	}
 
     return 0;

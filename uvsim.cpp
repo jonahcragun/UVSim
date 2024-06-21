@@ -46,7 +46,7 @@ void UVSim::parse_input(std::vector<std::string>& lines) {
     if (lines.size() > 100) {
         throw std::runtime_error("READ_FILE Error: File is too long: cannot exceed " + std::to_string(MEMORY_SIZE) + " lines");
     }
-    int i = 0;
+    size_t i = 0;
     for (auto line : lines) {
         if (line.empty()) {
             continue;
@@ -59,7 +59,7 @@ void UVSim::parse_input(std::vector<std::string>& lines) {
         }
 
         try {
-            for (int j = 0; j < line.length(); ++j) {
+            for (size_t j = 0; j < line.length(); ++j) {
                 char c = line[j];
                 if (j == 0 && (c == '-' || c == '+')) {
                     continue;
@@ -87,13 +87,13 @@ unsigned short UVSim::execute_op(short op_code, short mem_addr, short cur) {
                 read(input_handler->get_user_input(), main_memory, mem_addr);
                 break;
             } catch (const std::exception &e) {
-                std::cout << e.what() << "' please enter an integer." << std::endl;
+                *output_handler << e.what() << "' please enter an integer." << std::endl << std::endl;
             }
         }
     }
         // 11: WRITE
     else if (op_code == 11) {
-        write(std::cout, main_memory, mem_addr);
+        write(*output_handler, main_memory, mem_addr);
     }
         // 20: LOAD
     else if (op_code == 20) {
@@ -184,6 +184,6 @@ void UVSim::run() {
 }
 
 // Constructor, resets memory and accumulator on creation
-UVSim::UVSim(InputHandler* handler_in) : input_handler(handler_in) {
+UVSim::UVSim(InputHandler* handler_in, OutputHandler* hanlder_out) : input_handler(handler_in), output_handler(hanlder_out) {
     reset_memory();
 }

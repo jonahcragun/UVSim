@@ -1,7 +1,6 @@
 #include "memory_op.h"
 #include "constants.h"
 
-#include <iostream>
 #include <stdexcept>
 
 // Load a word from a specific location in memory into the accumulator

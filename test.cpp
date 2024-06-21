@@ -1,6 +1,7 @@
 #include "test.h"
 #include "uvsim.h"
 #include "console_input.h"
+#include "console_output.h"
 #include "constants.h"
 #include "arithmetic_op.h"
 #include "control_op.h"
@@ -13,8 +14,9 @@
 
 using std::exception;
 
-UVSim uvsim;
-UVSim_Input input_handler;
+ConsoleInputHandler* input_handler;
+ConsoleOutputHandler* output_handler;
+UVSim uvsim(input_handler, output_handler);
 /*
 Reference to be able to call the execute_op( opcode, mem_addr, cur_addr) function
 OPCODES:
@@ -388,10 +390,9 @@ void case_twentythree() { // Halt Case One
 }
 
 void case_twentyfour() { // Halt Case Two
-	UVSim uvs;
 	TEST("Testing uvsim.execute_op returns an index >= the size of the memory array for the halt op code",
-		uvs.execute_op(43, 0, 0) == MEMORY_SIZE,
-		"'execute_op(43, 0, 0)' returned incorrect index, expected: " + std::to_string(MEMORY_SIZE) + ", found: " + std::to_string(uvs.execute_op(43, 0, 0)));
+		uvsim.execute_op(43, 0, 0) == MEMORY_SIZE,
+		"'execute_op(43, 0, 0)' returned incorrect index, expected: " + std::to_string(MEMORY_SIZE) + ", found: " + std::to_string(uvsim.execute_op(43, 0, 0)));
 }
 
 void case_twentyfive() { // File Case One
@@ -420,7 +421,7 @@ void case_twentyfive() { // File Case One
     std::ifstream file_test2("test_pass_1.txt");
 
     TEST_FUNCTION("Testing UVSim_input split_lines function with a file stream",
-                  input_handler.split_lines(file_test2));
+                  input_handler->split_lines(file_test2));
 
     TEST("Testing that a file was opened successfully",
          file_test2.is_open(),
@@ -440,8 +441,8 @@ void case_twentysix() { // File Case Two
         file.is_open(),
         "File did not open as expected.");
 
-    EXCEPTION_TEST_FUNC("Testing runnning UVSim.run(vector<string>) with UVSim_input split_lines function with a file stream that has an invalid format will throw an error",
-                        uvsim.run(input_handler.split_lines(file)),
+    EXCEPTION_TEST_FUNC("Testing UVSim's input handler's split_lines function with a file stream that has an invalid format will throw an error",
+                        input_handler->split_lines(file),
                         std::runtime_error);
 
     file.close();
@@ -455,13 +456,13 @@ void case_twentyseven() { // File Case Three
         "File did not fail to open as expected.");
 
     EXCEPTION_TEST_FUNC("Testing UVSim_input split_lines function with a missing file will throw an error",
-                        input_handler.split_lines(file),
+                        input_handler->split_lines(file),
                         std::runtime_error);
 
     file.close();
 }
 
-// COMPILE COMMAND: g++ -o test test.cpp uvsim.cpp uvsim_input.cpp arithmetic_op.cpp control_op.cpp memory_op.cpp
+// COMPILE COMMAND: make test
 // RUN COMMAND: (Linux, MacOS) ./test.out  (Windows) test.exe
 int main() {
 //    TestHandler::get_instance().set_verbose(true); // Comment out this line if you want to see only failed tests

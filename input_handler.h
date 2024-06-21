@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <istream>
+#include <sstream>
 
 class InputHandler {
 public:
@@ -13,6 +14,17 @@ public:
     virtual std::vector<std::string> get_instructions() = 0;
 
     static std::vector<std::string> split_lines(std::istream& is);
+
+    template <typename T>
+    InputHandler& operator<<(const T& value) {
+        input_buffer << value;
+        return *this;
+    }
+
+protected:
+    std::ostringstream input_buffer;
+    std::istringstream user_input_buffer;
+    std::istringstream instr_buffer;
 };
 
 #endif

@@ -11,3 +11,7 @@
 test
 # compiled make file
 UVSim
+# object files
+*.o
+# core dump files
+UVSim
