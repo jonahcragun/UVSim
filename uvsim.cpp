@@ -86,8 +86,13 @@ unsigned short UVSim::execute_op(short op_code, short mem_addr, short cur) {
             try {
                 read(input_handler->get_user_input(), main_memory, mem_addr);
                 break;
+            } catch (const std::length_error &e) {
+                *output_handler << e.what();
+                output_handler->handle_output();
+                break;
             } catch (const std::exception &e) {
-                *output_handler << e.what() << "' please enter an integer." << std::endl << std::endl;
+                *output_handler << e.what() << "' please enter an integer.";
+                output_handler->handle_output();
             }
         }
     }
