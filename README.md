@@ -6,7 +6,53 @@ All the information in the UVSim is handled in terms of words. A **word** is a s
 
 ---
 
-### <u>Installation</u>
+
+### <u>Running the GUI based application</U>
+
+- Clone the repository.
+
+    > **Note:** You will need the directory path of where you are placing your clone (or files) of the repository, so it may be worth jotting down the location.
+
+- Create your UVSim's BasicML supplementary file, you can do this by following the instructions in the `Creating Your BasicML File` section below.
+
+#### For Windows:
+
+1. Open a Windows Command Prompt.
+
+    > This can be done by searching for `cmd` in the Windows search bar and clicking on the Command Prompt application.
+
+2. Navigate to the directory where you cloned the repository
+
+    > This can be done by using the change directory `cd` command.
+     ```cmd
+     cd path\to\repository
+     ```
+
+3. Navigate to the prog folder
+
+4. Execute the file "gui.exe"
+
+4. The program should now have opened in a separate window
+
+
+---
+
+### <u>Using the GUI</u>
+
+There are 3 main features visible when the GUI version of the application is opened:
+    - An output terminal window
+    - A run button
+    - An import data button
+
+Follow the steps bellow to run a BasicML program: 
+1. press the import data button where you will be prompted with a window to choose a file to upload
+2. Once a file has been successfully selected and uploaded, press the run button to run the program
+3. If input is requested a pop-up window will be displayed. Enter a value then hit submit to continue
+4. A message will be printed to the output window when the program has completed running
+ 
+---
+
+### <u>Installation (for terminal based application)</u>
 
 - Clone the repository.
 
@@ -149,3 +195,6 @@ For a list of available opcodes and their descriptions, please refer to the Oper
       C:\mingw-w64\x86_64-8.1.0-win32-seh-rt_v6-rev0\mingw64\bin
       ```
    - Click OK to close all dialog boxes.
+
+
+
