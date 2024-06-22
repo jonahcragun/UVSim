@@ -5,6 +5,7 @@
 *.out
 # executables
 *.exe
+!gui.exe
 # vim swap files
 *.swp
 # test compiled file
