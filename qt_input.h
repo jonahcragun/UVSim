@@ -12,6 +12,7 @@ class QtInputHandler : public InputHandler {
 public:
     std::istream& get_user_input() override;
     std::vector<std::string> get_instructions() override;
+    ~QtInputHandler();
 
     void set_input_data(const std::string& data);
     void set_instr_data(const std::vector<std::string>& data);

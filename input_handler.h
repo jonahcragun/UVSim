@@ -12,14 +12,7 @@ public:
 
     virtual std::istream& get_user_input() = 0;
     virtual std::vector<std::string> get_instructions() = 0;
-
     static std::vector<std::string> split_lines(std::istream& is);
-
-    template <typename T>
-    InputHandler& operator<<(const T& value) {
-        input_buffer << value;
-        return *this;
-    }
 
 protected:
     std::ostringstream input_buffer;

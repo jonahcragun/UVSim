@@ -6,33 +6,22 @@ All the information in the UVSim is handled in terms of words. A **word** is a s
 
 ---
 
-
 ### <u>Running the GUI based application</U>
-
 - Clone the repository.
-
     > **Note:** You will need the directory path of where you are placing your clone (or files) of the repository, so it may be worth jotting down the location.
-
 - Create your UVSim's BasicML supplementary file, you can do this by following the instructions in the `Creating Your BasicML File` section below.
 
 #### For Windows:
-
 1. Open a Windows Command Prompt.
-
     > This can be done by searching for `cmd` in the Windows search bar and clicking on the Command Prompt application.
-
 2. Navigate to the directory where you cloned the repository
-
     > This can be done by using the change directory `cd` command.
      ```cmd
      cd path\to\repository
      ```
-
 3. Navigate to the prog folder
-
 4. Execute the file "gui.exe"
-
-4. The program should now have opened in a separate window
+5. The program should now have opened in a separate window
 
 
 ---

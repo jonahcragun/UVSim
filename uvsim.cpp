@@ -6,6 +6,7 @@
 #include "control_op.h"
 
 #include <iostream>
+#include <iomanip>
 #include <vector>
 #include <string>
 #include <stdexcept>
@@ -68,6 +69,7 @@ void UVSim::parse_input(std::vector<std::string>& lines) {
                     throw std::runtime_error("READ_FILE Error: Invalid format '" + line + "' at line " + std::to_string(i));
                 }
             }
+            std::cout << "PARSED LINE: " << line << std::endl;
             main_memory[i] = std::stoi(line);
         } 
         catch (const std::invalid_argument& e) {
@@ -81,6 +83,7 @@ void UVSim::parse_input(std::vector<std::string>& lines) {
 // Return next memory address to run
 unsigned short UVSim::execute_op(short op_code, short mem_addr, short cur) {
     // 10: READ
+    std::cout << "EXECUTING: " << op_code << std::setw(2) << std::setfill('0') << mem_addr << std::endl;
     if (op_code == 10) {
         while (true) {
             try {
@@ -91,7 +94,7 @@ unsigned short UVSim::execute_op(short op_code, short mem_addr, short cur) {
                 output_handler->handle_output();
                 break;
             } catch (const std::exception &e) {
-                *output_handler << e.what() << "' please enter an integer.";
+                *output_handler << e.what() << " please enter an integer.";
                 output_handler->handle_output();
             }
         }
@@ -183,9 +186,18 @@ void UVSim::set_accumulator(short value) {
 
 // Start VM, loads passed vector<string> into memory, and executes the program
 void UVSim::run() {
+    std::cout << "RUNNING UVSIM-----------------------------" << std::endl;
     std::vector<std::string> instr_lines = input_handler->get_instructions();
+    for(const auto& instr: instr_lines)
+        std::cout << "INSTRUCTION PASSED: " << instr << std::endl;
+    if (instr_lines.empty()){
+        throw std::runtime_error("Something went wrong when attempting to get UVSim instructions.");
+    }
+    std::cout << "PARSING LINES-----------------------------" << std::endl;
     parse_input(instr_lines);
+    std::cout << "EXECUTING-----------------------------" << std::endl;
     execute();
+    reset_memory();
 }
 
 // Constructor, resets memory and accumulator on creation

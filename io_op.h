@@ -37,17 +37,17 @@ void read(std::istream& is, short (&main_memory)[SIZE], short mem_addr) {
             }
             if (!isdigit(c)) {
                 if (size_warning) {
-                    throw std::runtime_error("Warning: Input too large. Only the first signed numeric sequence of 4 digits will be stored.\nREAD Error: Invalid format '" + input + "'");
+                    throw std::runtime_error("Warning: Input too large. Only the first signed numeric sequence of 4 digits will be stored.\nREAD Error: Invalid format '" + input + '\'');
                 }
-                throw std::runtime_error("READ Error: Invalid format '" + input + "'");
+                throw std::runtime_error("READ Error: Invalid format '" + input + '\'');
             }
         }
         main_memory[mem_addr] = std::stoi(input);
     } catch (const std::invalid_argument& e) {
         if (size_warning) {
-            throw std::runtime_error("Warning: Input too large. Only the first signed numeric sequence of 4 digits will be stored.\nREAD Error: Invalid input '" + input + "'");
+            throw std::runtime_error("Warning: Input too large. Only the first signed numeric sequence of 4 digits will be stored.\nREAD Error: Invalid input '" + input + '\'');
         }
-        throw std::runtime_error("READ Error: Invalid input '" + input + "'");
+        throw std::runtime_error("READ Error: Invalid input '" + input + '\'');
     }
     if (size_warning) {
         throw std::length_error("Warning: Input too large. Only the first signed numeric sequence of 4 digits will be stored.");

@@ -19,7 +19,7 @@ signals:
     void inputSubmitted(const QString &input);
 
 private slots:
-    void on_submitButton_clicked();
+    void handle_submitButton_clicked();
 
 private:
     Ui::InputDialog *ui;
