@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QTableWidget>
 #include "inputdialog.h"
 #include "uvsim.h"
 #include "qt_input.h"
@@ -28,19 +29,28 @@ public:
     void overwrite_console(const char* cstr);
     void overwrite_console(const QString& outputString);
 
+    void set_table_row_count(const int count);
+
 private slots:
     void handle_importButton_clicked();
+    void handle_exportButton_clicked();
     void handle_runButton_clicked();
-    void handle_mainWindow_close();
     void on_inputReceived(const QString &input);
 
 private:
+    int row_count;
+
     Ui::MainWindow *ui;
     InputDialog *userInput;
-    std::vector<std::string> importData;
+    std::vector<std::string> instruction_data;
+    QTableWidget *memoryTable;
     QtInputHandler *input_handler;
     QtOutputHandler *output_handler;
     UVSim *uv_sim;
+
+    void update_instuction_table();
+    void reset_instruction_data(size_t start, size_t end_index);
+    void set_instruction(size_t index, std::string data);
 };
 
 #endif // MAINWINDOW_H

@@ -10,6 +10,12 @@
     <height>120</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <family>Sitka</family>
+    <pointsize>10</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
@@ -34,6 +40,9 @@
      <width>361</width>
      <height>31</height>
     </rect>
+   </property>
+   <property name="frame">
+    <bool>true</bool>
    </property>
   </widget>
  </widget>
