@@ -1,249 +1,239 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QFileDialog>
-#include <QFile>
-#include <QTextStream>
-#include <QDebug>
+#include "constants.h"
+#include <iomanip>
 #include <sstream>
 #include <iostream>
 #include <string>
-#include <QTableWidget>
-#include <QTableWidgetItem>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    , row_count(MEMORY_SIZE)
 {
     ui->setupUi(this);
     this->setWindowTitle("UVSim");
     this->setFixedSize(this->size());
 
-    memoryTable = ui->memoryTable;
-    memoryTable->verticalHeader()->setVisible(false);
-    QStringList headers = {"Memory Address", "Instruction"};
-    memoryTable->setHorizontalHeaderLabels(headers);
-    memoryTable->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
-    memoryTable->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+    connect(ui->importButton, &QPushButton::clicked, this, &MainWindow::handle_importButton_clicked);
+    connect(ui->exportButton, &QPushButton::clicked, this, &MainWindow::handle_exportButton_clicked);
+    connect(ui->runButton, &QPushButton::clicked, this, &MainWindow::handle_runButton_clicked);
+    connect(ui->settingsButton, &QPushButton::clicked, this, &MainWindow::handle_settingsButton_clicked);
 
-    userInput = new InputDialog(this);
+    memory_table = new MemoryTableManager(ui->memoryTable, row_count, this);
+    connect(memory_table, &MemoryTableManager::input_submitted, this, &MainWindow::handle_input_from_memory_table);
+    instruction_data = memory_table->get_data();
+
+    settings_dialog = new SettingsDialog(this);
+    connect(settings_dialog, &SettingsDialog::process_settings, this, &MainWindow::handle_input_from_settings);
+    auto [primary_r, primary_g, primary_b, secondary_r, secondary_g, secondary_b] = settings_dialog->get_gui_color_scheme();
+    handle_input_from_settings(primary_r, primary_g, primary_b, secondary_r, secondary_g, secondary_b);
+
+    user_input_dialog = new InputDialog(this);
     input_handler = new QtInputHandler([this](const std::string& str) { this->write_to_console(str); });
-    input_handler->tie_input_ui(*userInput);
+    input_handler->tie_input_ui(*user_input_dialog);
+    connect(user_input_dialog, &InputDialog::input_submitted, this, &MainWindow::handle_input_from_dialog_window);
 
     output_handler = new QtOutputHandler([this](const std::string& str) { this->write_to_console(str); });
 
     uv_sim = new UVSim(&(*input_handler), &(*output_handler));
 
-    connect(userInput, &InputDialog::inputSubmitted, this, &MainWindow::on_inputReceived);
-    connect(ui->importButton, &QPushButton::clicked, this, &MainWindow::handle_importButton_clicked);
-    connect(ui->exportButton, &QPushButton::clicked, this, &MainWindow::handle_exportButton_clicked);
-    connect(ui->runButton, &QPushButton::clicked, this, &MainWindow::handle_runButton_clicked);
+    console_buffer << "Welcome to the UVSim.\n\n"
+                      "Please import a text file with lines of BasicML instructions or double click an instruction "
+                      "in the memory table on the left to manually set an instruction.\n\n"
+                      "When ready hit 'RUN' to execute the program.\n";
+    write_buffer_to_console(true);
+
+    console_buffer << std::setw(10) << std::setfill(' ') << "";
+    console_buffer <<  std::setw(80) << std::setfill('-') << "";
+    console_buffer <<  std::setw(10) << std::setfill(' ') << "\n";
+    line_split = console_buffer.str();
+    console_buffer.str("");
 }
 
-MainWindow::~MainWindow()
-{
+MainWindow::~MainWindow(){
     delete ui;
-    delete userInput;
+    delete user_input_dialog;
+    delete settings_dialog;
     delete input_handler;
     delete output_handler;
     delete uv_sim;
+    delete memory_table;
 }
 
 void MainWindow::closeEvent(QCloseEvent*) {
     QApplication::quit();
 }
 
-void MainWindow::write_to_console(const std::string& str)
-{
-    QString newQString = QString::fromStdString(str);
-    write_to_console(newQString);
+void MainWindow::write_to_console(const std::string& str, bool overwrite){
+    QString console_qstring = QString::fromStdString(str);
+    write_to_console(console_qstring, overwrite);
 }
 
-void MainWindow::write_to_console(const char* cstr)
-{
-    QString newQString = QString::fromUtf8(cstr);
-    write_to_console(newQString);
+void MainWindow::write_to_console(const char* cstr, bool overwrite){
+    QString console_qstring = QString::fromUtf8(cstr);
+    write_to_console(console_qstring, overwrite);
 }
 
-void MainWindow::write_to_console(const QString& outputString)
-{
-    ui->consoleTextEdit->append(outputString);
+void MainWindow::write_to_console(const QString& outputString, bool overwrite){
+    if (overwrite) {
+        ui->consoleTextEdit->setPlainText(outputString);
+    } else {
+        ui->consoleTextEdit->append(outputString);
+    }
+    QCoreApplication::processEvents();
 }
 
-void MainWindow::overwrite_console(const std::string& str)
-{
-    QString newQString = QString::fromStdString(str);
-    overwrite_console(newQString);
+void MainWindow::write_buffer_to_console(bool overwrite){
+    QString console_qstring = QString::fromStdString(console_buffer.str());
+    write_to_console(console_qstring, overwrite);
+    console_buffer.str("");
+    QCoreApplication::processEvents();
 }
 
-void MainWindow::overwrite_console(const char* cstr)
-{
-    QString newQString = QString::fromUtf8(cstr);
-    overwrite_console(newQString);
-}
+void MainWindow::handle_importButton_clicked() {
+    size_t size_cap = static_cast<size_t>(row_count);
 
-void MainWindow::overwrite_console(const QString& outputString)
-{
-    ui->consoleTextEdit->setPlainText(outputString);
-}
+    // Temporarily block signals to avoid recursion
+    memory_table->set_block_signals_flag(true);
+    memory_table->reset_data(0, size_cap);
+    std::vector<std::string> file_import_data;
 
-void MainWindow::set_table_row_count(const int count){
-    if (row_count == count){
+    try {
+        write_buffer_to_console(true);
+        write_to_console("Please select a file with lines of BasicML instructions to import.");
+        file_import_data = input_handler->import_instructions_from_file();
+    } catch (const std::exception& e) {
+        console_buffer << e.what() << "\nFailed to import file.";
+        write_buffer_to_console();
         return;
     }
-    row_count = count;
-    memoryTable->setRowCount(row_count);
-    update_instuction_table();
-}
 
-void MainWindow::update_instuction_table(){
-    if (instruction_data.size() == 0){
-        reset_instruction_data(0, row_count);
+    size_t last_set_index = file_import_data.size();
+    if (file_import_data.size() > size_cap) {
+        console_buffer << "\nImport Error: File exceeds the allocated memory size of the UVSim program.\nKeeping the first '"
+                       << row_count << "' lines of the file." << "\n";
+        write_buffer_to_console();
+        last_set_index = size_cap;
     }
-    if (static_cast<size_t>(row_count) != instruction_data.size()){
-        std::ostringstream output_error;
-        output_error << "Update Table Error: Table size '" << row_count << "' and instruction count '"
-                     << instruction_data.size() << "' mismatch.";
-        throw std::out_of_range(output_error.str());
-    }
+    write_to_console("\nFile imported successfully.");
 
-    for (int instruction_index = 0; instruction_index < row_count; ++instruction_index) {
-        // Update the memory address column (zero-filled 2-width numbers)
-        QString memoryAddress = QString("%1:").arg(instruction_index, 2, 10, QChar('0'));
-        QTableWidgetItem *addressItem = new QTableWidgetItem(memoryAddress);
-        addressItem->setFlags(addressItem->flags() & ~Qt::ItemIsEditable);
-        addressItem->setTextAlignment(Qt::AlignVCenter | Qt::AlignRight);
-        memoryTable->setItem(instruction_index, 0, addressItem);
-
-        // Update the instruction column
-        QTableWidgetItem *instructionItem = new QTableWidgetItem(QString::fromStdString(instruction_data[instruction_index]));
-        instructionItem->setTextAlignment(Qt::AlignVCenter | Qt::AlignCenter);
-        memoryTable->setItem(instruction_index, 1, instructionItem);
-    }
-}
-
-void MainWindow::reset_instruction_data(size_t start_index, size_t end_index) {
-    if (end_index > static_cast<size_t>(row_count)) {
-        end_index = static_cast<size_t>(row_count);
-    }
-    if (start_index > end_index){
-        std::ostringstream output_error;
-        output_error << "Reset Instruction Vector Error: The passed start index '" << start_index
-                     << "' is beyond the end index '" << end_index << "'";
-        throw std::out_of_range(output_error.str());
-    }
-    if (instruction_data.capacity() < end_index) {
-        instruction_data.reserve(end_index);
-    }
-
-    std::string default_instruction = "+0000";
-    for (size_t instruction_index = start_index; instruction_index < end_index; ++instruction_index) {
-        if (instruction_index >= instruction_data.size()) {
-            instruction_data.push_back(default_instruction);
-        } else if (instruction_data[instruction_index] == default_instruction) {
-            continue;
-        } else {
-            instruction_data[instruction_index] = default_instruction;
+    console_buffer << line_split << "Validating new instructions...\n";
+    write_buffer_to_console();
+    for (size_t instruction_index = 0; instruction_index < last_set_index; ++instruction_index) {
+        try {
+            input_handler->validate_instruction(file_import_data[instruction_index]);
+            memory_table->set_data(instruction_index, file_import_data[instruction_index]);
+        } catch (const std::exception& error) {
+            console_buffer << "Line " << instruction_index << " | " << error.what() << "Skipping instruction." << "\n";
+            write_buffer_to_console();
         }
     }
-}
+    memory_table->update();
+    instruction_data = memory_table->get_data();
 
+    // Restore signal blocking state
+    memory_table->set_block_signals_flag(false);
 
-void MainWindow::set_instruction(size_t index, std::string data){
-    if (index >= instruction_data.size()) {
-        std::ostringstream output_error;
-        output_error << "Set Instruction Error: The provided index '" << index
-                     << "' is outside the expected range of [0-" << instruction_data.size() - 1 << "]";
-        throw std::out_of_range(output_error.str());
-    }
-
-    instruction_data[index] = data;
-}
-
-void MainWindow::handle_importButton_clicked()
-{
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "", tr("Text Files (*.txt)"));
-    if (!fileName.isEmpty()) {
-        QFile file(fileName);
-        if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-            QTextStream in(&file);
-            QString fileContent = in.readAll();
-            file.close();
-
-            std::string stdFileContent = fileContent.toStdString();
-            std::istringstream inputStream(stdFileContent);
-
-            size_t size_cap = static_cast<size_t>(row_count);
-            reset_instruction_data(0, size_cap);
-            const std::vector<std::string> file_import_data = input_handler->split_lines(inputStream);
-            size_t last_set_index = file_import_data.size();
-            if (file_import_data.size() > size_cap) {
-                std::ostringstream output_warning;
-                output_warning << "File exceeds the size of the UVSim. Keeping the first '"
-                               << row_count << "' lines of the file.";
-                write_to_console(output_warning.str());
-                last_set_index = size_cap;
-            }
-
-            for (size_t instruction_index = 0; instruction_index < last_set_index; ++instruction_index){
-                set_instruction(instruction_index, file_import_data[instruction_index]);
-            }
-            update_instuction_table();
-
-            if (!instruction_data.empty()){
-                input_handler->set_instr_data(instruction_data);
-                overwrite_console("File imported successfully.");
-            } else {
-                overwrite_console("Unexpected error occured. File did not import.");
-            }
-        }
-    }
-}
-
-
-void MainWindow::handle_exportButton_clicked()
-{
-    QString defaultFileName = "BasicML_instructions.txt";
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), defaultFileName, tr("Text Files (*.txt)"));
-    if (!fileName.isEmpty()) {
-        QFile file(fileName);
-        if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            QTextStream out(&file);
-
-            for (size_t i = 0; i < instruction_data.size(); ++i) {
-                out << QString::fromStdString(instruction_data[i])
-                    << (i != instruction_data.size() - 1 ? "\n" : "");
-            }
-
-            file.close();
-            overwrite_console("Instructions exported successfully.");
-        } else {
-            overwrite_console("Failed to open file for writing.");
-        }
+    if (!instruction_data.empty()) {
+        write_to_console("Validation Complete.");
     } else {
-        overwrite_console("File save cancelled.");
+        write_to_console("Unexpected error occurred. File did not import.");
     }
+
+    console_buffer << line_split;
+    write_buffer_to_console();
 }
 
+void MainWindow::handle_exportButton_clicked(){
+    output_handler->export_instructions_to_file(instruction_data);
+}
 
-void MainWindow::handle_runButton_clicked()
-{
+void MainWindow::handle_runButton_clicked(){
+    // Temporarily block signals to avoid recursion
+    memory_table->set_block_signals_flag(true);
+    memory_table->set_editable_flag(false);
     try {
         if (instruction_data.empty()) {
-            throw std::runtime_error("Error: No data imported. Please import a file first.");
+            throw std::runtime_error("Error: Data is in it's initial unusable state. "
+                                     "Please import a file or manually add an instruction before running again.\n");
         }
-
-        overwrite_console("Attempting to run program...");
+        console_buffer.str("");
+        write_buffer_to_console(true);
+        write_to_console("Attempting to run program...\n");
+        input_handler->set_instr_data(instruction_data);
         uv_sim->run();
         write_to_console("Program complete.");
+
+        console_buffer << line_split;
+        write_buffer_to_console();
+    } catch( std::exception& e) {
+        write_to_console(e.what());
     }
-    catch(const std::exception& e) {
-        std::istringstream error(e.what());
-        std::cout << e.what() << std::endl;
-        write_to_console(error.str());
+    memory_table->set_editable_flag(true);
+    // Restore signal blocking state
+    memory_table->set_block_signals_flag(false);
+}
+
+void MainWindow::handle_settingsButton_clicked(){
+    settings_dialog->show();
+}
+
+void MainWindow::handle_input_from_dialog_window(const QString &input){
+    input_handler->set_input_data(input.toStdString());
+}
+
+void MainWindow::handle_input_from_memory_table(QTableWidgetItem *item){
+    int row = item->row();
+    int column = item->column();
+
+    if (column == 1) { // Instruction column
+        QString new_value = item->text();
+        std::string new_instruction = new_value.toStdString();
+
+        // Temporarily block signals to avoid recursion
+        memory_table->set_block_signals_flag(true);
+
+        try {
+            input_handler->validate_instruction(new_instruction);
+            memory_table->set_data(row, new_instruction); // Will not reach this update if instruction is invalid
+            if (instruction_data.empty()){
+                instruction_data = memory_table->get_data();
+            }
+            instruction_data[row] = new_instruction;
+            item->setText(QString::fromStdString(new_instruction));
+        } catch (const std::exception &e) {
+            // If invalid, revert the change and log the error
+            item->setText(QString::fromStdString(instruction_data[row]));
+            write_to_console(e.what(), true);
+        }
+
+        // Restore signal blocking state
+        memory_table->set_block_signals_flag(false);
     }
 }
 
-void MainWindow::on_inputReceived(const QString &input)
-{
-    input_handler->set_input_data(input.toStdString());
+void MainWindow::handle_input_from_settings(const int &primary_r, const int &primary_g,
+                                            const int &primary_b, const int &secondary_r,
+                                            const int &secondary_g, const int &secondary_b){
+    QString primary_color = QString("rgb(%1, %2, %3)").arg(primary_r).arg(primary_g).arg(primary_b);
+    QString secondary_color = QString("rgb(%1, %2, %3)").arg(secondary_r).arg(secondary_g).arg(secondary_b);
+    QString table_cell_outline_color = "rgb(50, 50, 50)";
+    QString input_field_color = "rgb(10, 10, 10)";
+
+    QString style_sheet = QString(
+                              "QWidget { background-color: %2; }"
+                              "QPushButton { background-color: %1; color: %2; }"
+                              "QLabel { background-color: %1; color: %2; }"
+                              "QLineEdit { background-color: %4; color: %1; }"
+                              "QTextEdit { background-color: %4; color: %1; }"
+                              "QTableWidget { background-color: %4; color: %1; }"
+                              "QTableWidget::item { border: 1px solid %3; }"
+                              "QHeaderView::section { background-color: %1; color: %2; }"
+                              ).arg(primary_color,
+                                   secondary_color,
+                                   table_cell_outline_color,
+                                   input_field_color);
+
+    this->setStyleSheet(style_sheet);
 }

@@ -23,7 +23,7 @@ private:
     void parse_input(std::vector<std::string>& lines);
 
 public:
-    unsigned short execute_op(short op_code, short mem_addr, short cur);
+    unsigned short execute_op(short op_code, short mem_addr, unsigned short cur);
     short& get_accumulator();
     short* get_memory();
     short get_memory_value(short mem_addr);

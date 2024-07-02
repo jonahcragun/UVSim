@@ -19,7 +19,9 @@ SOURCES += \
     ../uvsim.cpp \
     inputdialog.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    memory_table_manager.cpp \
+    settingsdialog.cpp
 
 HEADERS += \
     ../arithmetic_op.h \
@@ -33,11 +35,14 @@ HEADERS += \
     ../qt_output.h \
     ../uvsim.h \
     inputdialog.h \
-    mainwindow.h
+    mainwindow.h \
+    memory_table_manager.h \
+    settingsdialog.h
 
 FORMS += \
     inputdialog.ui \
-    mainwindow.ui
+    mainwindow.ui \
+    settingsdialog.ui
 
 TRANSLATIONS += \
     gui_en_US.ts

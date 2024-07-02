@@ -18,7 +18,6 @@ int main(int argc, char *argv[])
         }
     }
     MainWindow program_gui;
-    program_gui.set_table_row_count(100);
     program_gui.show();
     return app.exec();
 }

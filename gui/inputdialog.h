@@ -15,8 +15,11 @@ public:
     explicit InputDialog(QWidget *parent = nullptr);
     ~InputDialog();
 
+protected:
+    void keyPressEvent(QKeyEvent *event) override;
+
 signals:
-    void inputSubmitted(const QString &input);
+    void input_submitted(const QString &input);
 
 private slots:
     void handle_submitButton_clicked();

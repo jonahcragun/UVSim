@@ -10,14 +10,17 @@
 
 class QtInputHandler : public InputHandler {
 public:
-    std::istream& get_user_input() override;
-    std::vector<std::string> get_instructions() override;
+    QtInputHandler(std::function<void(const std::string&)> console);
     ~QtInputHandler();
 
+    std::istream& get_user_input() override;
+    std::vector<std::string> get_instructions() override;
+
+    std::vector<std::string> import_instructions_from_file();
+
     void set_input_data(const std::string& data);
-    void set_instr_data(const std::vector<std::string>& data);
+    void set_instr_data(std::vector<std::string>& data);
     void tie_input_ui(InputDialog& input_ui);
-    QtInputHandler(std::function<void(const std::string&)> console);
 
 protected:
     InputDialog* userInput = nullptr;
