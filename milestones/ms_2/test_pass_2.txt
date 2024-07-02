@@ -1,0 +1,29 @@
+NOT WORKING YET
++1050   ADDR 0 READ input to address 50
++1150   ADDR 1 WRITE address 52 to output
+-1051   ADDR 2 READ input to address 51
++1151   ADDR 3 WRITE address 52 to output
++2050   ADDR 4 LOAD address 50 to accumulator
++2152   ADDR 5 STORE accumulator to address 52
++1152   ADDR 6 WRITE address 52 to output
++3027   ADDR 7 ADD value at address 27 to accumulator
+-3152   ADDR 8 STORE result of ADD to address 52
++1152   ADDR 9 WRITE result of addition at address 52
++2153   ADDR 10 STORE accumulator to address 53
++3150   ADDR 11 SUBTRACT value at address 50 from accumulator
+-2154   ADDR 12 STORE result of SUBTRACT to address 54
++1154   ADDR 13 WRITE result of subtraction at address 54
+-3216   ADDR 14 DIVIDE value at address 16 into accumulator
++2155   ADDR 15 STORE result of DIVIDE to address 55
++1155   ADDR 16 WRITE result of division at address 55
++3316   ADDR 17 MULTIPLY value at address 16 with accumulator
+-2156   ADDR 18 STORE result of MULTIPLY to address 56
++1156   ADDR 19 WRITE result of multiplication at address 56
++1150   ADDR 20 WRITE address 50 to output
++1119   ADDR 21 WRITE value at address 19 to output (expected value after HALT)
+-
++4300   ADDR 22 HALT
+-5001   ADDR 23 VALUE to add for negative
++0000   ADDR 24
++0000   ADDR 25
++0000   ADDR 26
