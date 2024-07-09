@@ -20,8 +20,16 @@
 17. The system shall provide an operation that branches to a specified memory location if the accumulator is zero
 18. The system shall provide an operation that stops the execution of the program 
 19. The system shall provide a way to collect user input and display output
+20. The system shall provide a way to configure the colors of the user interface
+21. The systems default colors shall be UVU Colors
+22. The sytem shall provide a way for the user to load files and convert them to BasicML programs
+23. The system shall provide a way for the user to view commands that are loaded in
+24. The system shall provide a way for the user to edit commands that are loaded in
+25. The system shall provide cut/copy/paste functionality while the user edits commands 
+26. The system shall provide a way to save their commands to a file
 
 ## Non-functional Requirements
 1. The system shall allow users to write and run simplified machine language
 2. The system shall execute each instruction within 1 second under normal operational conditions
 3. The system shall have a user interface that distinguishes each field and its functionality
+ 
