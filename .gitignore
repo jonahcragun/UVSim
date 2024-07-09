@@ -16,3 +16,5 @@ UVSim
 *.o
 # core dump files
 UVSim
+
+gui/build/Desktop_Qt_6_7_1_MinGW_64_bit-Debug/.qtc_clangd/compile_commands.json

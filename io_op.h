@@ -33,18 +33,19 @@ void read(std::istream& is, short (&main_memory)[SIZE], short mem_addr) {
     }
 
     bool overwrite_warning = (abs(main_memory[mem_addr]) == 4300) ? true : false;
-    bool size_warning;
-    if (input.length() > 4) {
+    bool size_warning = false;
+    if (instruction_length > 4) {
         if (input[0] == '-' || input[0] == '+') {
             // Only keep the first 5 characters
+            size_warning = (instruction_length > 5) ? true : false;
             input = input.substr(0, 5);
-            size_warning = (input.length() > 5) ? true : false;
         } else {
             // Only keep the first 4 characters
+            size_warning = (instruction_length > 4) ? true : false;
             input = input.substr(0, 4);
-            size_warning = (input.length() > 4) ? true : false;
         }
     }
+
     for (size_t i = 0; i < input.length(); ++i) {
         char c = input[i];
         if (i == 0 && (c == '-' || c == '+')) {
