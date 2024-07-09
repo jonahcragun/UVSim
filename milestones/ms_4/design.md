@@ -189,7 +189,7 @@ UVSim is designed to be user-friendly and educational, making it an ideal tool f
 1. Double click on an instruction.
 2. Use your machines Cut/Copy/Paste shortcut.
 
-### Use Case 17
+### Use Case 18
 - **ACTOR**: User
 - **SYSTEM**: UI System
 - **GOAL**: Change UI Colors
