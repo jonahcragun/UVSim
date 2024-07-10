@@ -54,13 +54,13 @@ All the information in the UVSim is handled in terms of words. A **word** is a s
 
 1. Click the button on the bottom left of the sceen labeled "Import Instructions"
 
-    > A window should pop up showing your files system
+    > A window should pop up showing your file system
 
 2. Navigate to the directory that contains your file of BasicML instructions
 
 3. Select the desired file, and open it
 
-    > The window should now close and instructions from the file should be shown in under the "Instruction" toward the left side of the screen
+    > The window should now close and instructions from the file should be shown in under the "Instruction" toward the left side of the screen.
 
 4. If errors were found in the file, appropriate error messages will be printed in the console. Resolve the errors in order to load the file into memory
 
