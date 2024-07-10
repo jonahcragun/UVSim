@@ -74,17 +74,17 @@ All the information in the UVSim is handled in terms of words. A **word** is a s
 
 3. The instructions should now run starting at memory location 0 and stopping when a halt instruction is read or the end of memory is reached.
 
-    < If a read instruction is run, a popup window will appear and propt the user for input
+    > If a read instruction is run, a popup window will appear and propt the user for input
 
 4. If input is prompted, type a number (4 digits or fewer) and click the button labeled "submit"
 
-    < If an invalid character is entered an error message will be printed to the console and the popup window will appear again to request user input. (Values greater than 4 digits will be truncated before checking validity)
+    > If an invalid character is entered an error message will be printed to the console and the popup window will appear again to request user input. (Values greater than 4 digits will be truncated before checking validity)
 
 #### Save Instructions:
 
 1. Using the cursor, click the button located toward the bottom left of the screen labeled "Save Instructions to File"
 
-    < A popup window should appear with access to your local file system
+    > A popup window should appear with access to your local file system
 
 2. Enter the name of the file to save instructions to in the "Save as" text field
 
@@ -92,13 +92,13 @@ All the information in the UVSim is handled in terms of words. A **word** is a s
 
 4. Press the save button (using the cursor) when ready to save the file
 
-    < A message should appear in the Console window "Instructions exported successfully"
+    > A message should appear in the Console window "Instructions exported successfully"
 
 #### Change Theme:
 
 1. Using the cursor, click the button in the top left of the application labeled "Settings"
 
-    < A popup window should appear with RGB fields for both primary and secondary colors
+    > A popup window should appear with RGB fields for both primary and secondary colors
 
 2. Enter values in the text field associated with R, G, or B for the desired color
 
