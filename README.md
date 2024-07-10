@@ -13,14 +13,20 @@ All the information in the UVSim is handled in terms of words. A **word** is a s
 
 #### For Windows:
 1. Open a Windows Command Prompt.
+
     > This can be done by searching for `cmd` in the Windows search bar and clicking on the Command Prompt application.
+
 2. Navigate to the directory where you cloned the repository
+
     > This can be done by using the change directory `cd` command.
      ```cmd
      cd path\to\repository
      ```
+
 3. Navigate to the prog folder
+
 4. Execute the file "gui.exe"
+
 5. The program should now have opened in a separate window
 
 
@@ -28,16 +34,75 @@ All the information in the UVSim is handled in terms of words. A **word** is a s
 
 ### <u>Using the GUI</u>
 
-There are 3 main features visible when the GUI version of the application is opened:
-    - An output terminal window
-    - A run button
-    - An import data button
+#### Adding/Modifying Instructions:
 
-Follow the steps bellow to run a BasicML program: 
-1. press the import data button where you will be prompted with a window to choose a file to upload
-2. Once a file has been successfully selected and uploaded, press the run button to run the program
-3. If input is requested a pop-up window will be displayed. Enter a value then hit submit to continue
-4. A message will be printed to the output window when the program has completed running
+1. Locate the large rectangular box on the left side of the screen
+
+    > The box contains 2 rows, 1 labeled "Memory Adresses" and the other labeled "Instruction"
+
+2. Locate the memory address where the instruction is to be added
+
+    > The program will always start reading instructions at address 0 when run
+
+3. In the instruction column, double click on the cell next to the desired memory address
+
+4. Type a 4 digit number representing a value or instruction and hit the "Enter" key when finished
+
+    > If an invalid character is entered or a value that is too large, an error message will be printed in the console (Large box on the right side of the screen) and the value inside the instruction cell will not change.
+
+#### Importing a File:
+
+1. Click the button on the bottom left of the sceen labeled "Import Instructions"
+
+    > A window should pop up showing your files system
+
+2. Navigate to the directory that contains your file of BasicML instructions
+
+3. Select the desired file, and open it
+
+    > The window should now close and instructions from the file should be shown in under the "Instruction" toward the left side of the screen
+
+4. If errors were found in the file, appropriate error messages will be printed in the console. Resolve the errors in order to load the file into memory
+
+5. Once the file has been loaded in, you can modify any of the instructions by following the steps under "Adding instructions to memory"
+
+#### Running Instructions:
+
+1. Load instructions into the virtual memory system following the steps under "Importing a file" or "Adding/modifying instructions"
+
+2. Using the cursor, click the button labeled "Run" found toward the bottom right of the application
+
+3. The instructions should now run starting at memory location 0 and stopping when a halt instruction is read or the end of memory is reached.
+
+    < If a read instruction is run, a popup window will appear and propt the user for input
+
+4. If input is prompted, type a number (4 digits or fewer) and click the button labeled "submit"
+
+    < If an invalid character is entered an error message will be printed to the console and the popup window will appear again to request user input. (Values greater than 4 digits will be truncated before checking validity)
+
+#### Save Instructions:
+
+1. Using the cursor, click the button located toward the bottom left of the screen labeled "Save Instructions to File"
+
+    < A popup window should appear with access to your local file system
+
+2. Enter the name of the file to save instructions to in the "Save as" text field
+
+3. Choose the directory where the file should be stored
+
+4. Press the save button (using the cursor) when ready to save the file
+
+    < A message should appear in the Console window "Instructions exported successfully"
+
+#### Change Theme:
+
+1. Using the cursor, click the button in the top left of the application labeled "Settings"
+
+    < A popup window should appear with RGB fields for both primary and secondary colors
+
+2. Enter values in the text field associated with R, G, or B for the desired color
+
+3. When all values have been entered, click accept (using the cursor) to update the theme of the application
  
 ---
 
