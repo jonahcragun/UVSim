@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QTableWidget>
+#include <QTabWidget>
 #include <vector>
 #include <string>
 
@@ -11,7 +12,7 @@ class MemoryTableManager : public QObject
     Q_OBJECT
 
 public:
-    explicit MemoryTableManager(QTableWidget *tableWidget, int rowCount, QObject *parent = nullptr);
+    explicit MemoryTableManager(QTabWidget *tabWidget, int rowCount, QObject *parent = nullptr);
 
     void set_row_count(int count);
     void update();
@@ -20,6 +21,7 @@ public:
     void set_editable_flag(bool editable);
     void set_block_signals_flag(bool is_blocked);
     const std::vector<std::string>& get_data();
+    void add_new_tab();
 
 signals:
     void input_submitted(QTableWidgetItem *item);
@@ -29,13 +31,24 @@ protected:
 
 private slots:
     void handle_item_changed(QTableWidgetItem *item);
+    void handle_tab_changed();
+    void handle_create_tab_clicked(int index);
+    void handle_tab_close(int index);
 
 private:
-    QTableWidget *memory_table_widget;
+    QTabWidget *tab_widget;
     int row_count;
-    std::vector<std::string> data;
+    std::vector<QTableWidget*> memory_table_widgets;
+    std::vector<std::vector<std::string>> memory_tables_data;
+    QTableWidget *active_memory_table_widget;
+    std::vector<std::string> *active_memory_table_data;
     bool signals_blocked;
-    void update_headers();
+
+    void setup_tab_widget();
+    void update_headers(QTableWidget *memory_table_widget);
+    void update_active_memory_table();
+    void add_create_tab();
+    void move_create_tab_to_end();
 };
 
 #endif

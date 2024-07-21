@@ -29,7 +29,7 @@
    <widget class="QPushButton" name="importButton">
     <property name="geometry">
      <rect>
-      <x>60</x>
+      <x>100</x>
       <y>560</y>
       <width>211</width>
       <height>31</height>
@@ -85,7 +85,7 @@
       <x>370</x>
       <y>270</y>
       <width>511</width>
-      <height>271</height>
+      <height>266</height>
      </rect>
     </property>
     <property name="font">
@@ -107,40 +107,10 @@
      <set>Qt::TextSelectableByMouse</set>
     </property>
    </widget>
-   <widget class="QTableWidget" name="memoryTable">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>40</y>
-      <width>281</width>
-      <height>501</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Sitka</family>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::WinPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Sunken</enum>
-    </property>
-    <property name="rowCount">
-     <number>0</number>
-    </property>
-    <property name="columnCount">
-     <number>2</number>
-    </property>
-    <column/>
-    <column/>
-   </widget>
    <widget class="QPushButton" name="exportButton">
     <property name="geometry">
      <rect>
-      <x>60</x>
+      <x>100</x>
       <y>590</y>
       <width>211</width>
       <height>31</height>
@@ -206,9 +176,69 @@
      <string>SETTINGS</string>
     </property>
    </widget>
+   <widget class="QTabWidget" name="memoryTableTabs">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>30</y>
+      <width>311</width>
+      <height>506</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="focusPolicy">
+     <enum>Qt::TabFocus</enum>
+    </property>
+    <property name="tabPosition">
+     <enum>QTabWidget::West</enum>
+    </property>
+    <property name="tabShape">
+     <enum>QTabWidget::Triangular</enum>
+    </property>
+    <property name="currentIndex">
+     <number>-1</number>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>10</width>
+      <height>10</height>
+     </size>
+    </property>
+    <property name="usesScrollButtons">
+     <bool>false</bool>
+    </property>
+    <property name="documentMode">
+     <bool>false</bool>
+    </property>
+    <property name="tabsClosable">
+     <bool>false</bool>
+    </property>
+    <property name="movable">
+     <bool>false</bool>
+    </property>
+    <property name="tabBarAutoHide">
+     <bool>false</bool>
+    </property>
+   </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <tabstops>
+  <tabstop>runButton</tabstop>
+  <tabstop>importButton</tabstop>
+  <tabstop>exportButton</tabstop>
+  <tabstop>settingsButton</tabstop>
+  <tabstop>memoryTableTabs</tabstop>
+  <tabstop>consoleTextEdit</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

@@ -3,6 +3,7 @@
 #include <QString>
 #include <QIntValidator>
 #include <QKeyEvent>
+#include <QToolTip>
 
 SettingsDialog::SettingsDialog(QWidget *parent)
     : QDialog(parent)
@@ -13,20 +14,19 @@ SettingsDialog::SettingsDialog(QWidget *parent)
 
     this->setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint);
 
-    QIntValidator *rgb_validator = new QIntValidator(0, 255, this);
-
-    ui->primaryRLineEdit->setValidator(rgb_validator);
-    ui->primaryGLineEdit->setValidator(rgb_validator);
-    ui->primaryBLineEdit->setValidator(rgb_validator);
-    ui->secondaryRLineEdit->setValidator(rgb_validator);
-    ui->secondaryGLineEdit->setValidator(rgb_validator);
-    ui->secondaryBLineEdit->setValidator(rgb_validator);
+    connect(ui->primary01RLineEdit, &QLineEdit::textChanged, this, &SettingsDialog::validate_rgb_input);
+    connect(ui->primary02GLineEdit, &QLineEdit::textChanged, this, &SettingsDialog::validate_rgb_input);
+    connect(ui->primary03BLineEdit, &QLineEdit::textChanged, this, &SettingsDialog::validate_rgb_input);
+    connect(ui->secondary01RLineEdit, &QLineEdit::textChanged, this, &SettingsDialog::validate_rgb_input);
+    connect(ui->secondary02GLineEdit, &QLineEdit::textChanged, this, &SettingsDialog::validate_rgb_input);
+    connect(ui->secondary03BLineEdit, &QLineEdit::textChanged, this, &SettingsDialog::validate_rgb_input);
 
     connect(ui->acceptButton, &QPushButton::clicked, this, &SettingsDialog::handle_acceptButton_clicked);
     connect(ui->cancelButton, &QPushButton::clicked, this, &SettingsDialog::handle_cancelButton_clicked);
 
     this->setModal(true);
 }
+
 
 SettingsDialog::~SettingsDialog(){
     delete ui;
@@ -39,12 +39,12 @@ void SettingsDialog::handle_acceptButton_clicked(){
 }
 
 std::tuple<int, int, int, int, int, int> SettingsDialog::get_gui_color_scheme(){
-    int primary_r = ui->primaryRLineEdit->text().toInt();
-    int primary_g = ui->primaryGLineEdit->text().toInt();
-    int primary_b = ui->primaryBLineEdit->text().toInt();
-    int secondary_r = ui->secondaryRLineEdit->text().toInt();
-    int secondary_g = ui->secondaryGLineEdit->text().toInt();
-    int secondary_b = ui->secondaryBLineEdit->text().toInt();
+    int primary_r = ui->primary01RLineEdit->text().toInt();
+    int primary_g = ui->primary02GLineEdit->text().toInt();
+    int primary_b = ui->primary03BLineEdit->text().toInt();
+    int secondary_r = ui->secondary01RLineEdit->text().toInt();
+    int secondary_g = ui->secondary02GLineEdit->text().toInt();
+    int secondary_b = ui->secondary03BLineEdit->text().toInt();
 
     return std::make_tuple(primary_r, primary_g, primary_b, secondary_r, secondary_g, secondary_b);
 }
@@ -53,10 +53,29 @@ void SettingsDialog::handle_cancelButton_clicked(){
     this->close();
 }
 
+void SettingsDialog::validate_rgb_input(const QString &text)
+{
+    bool valid_rgb_value;
+    int value = text.toInt(&valid_rgb_value);
+
+    if (!valid_rgb_value || value < 0 || value > 255) {
+        QLineEdit *line_edit = qobject_cast<QLineEdit *>(sender());
+        if (line_edit) {
+            QToolTip::showText(line_edit->mapToGlobal(QPoint(0, line_edit->height()/2)),
+                               "Must be a valid RGB value between 0-255",
+                               line_edit);
+
+            line_edit->setText("");
+        }
+    }
+}
+
 void SettingsDialog::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Escape) {
         handle_cancelButton_clicked();
+    } else if (event->key() == Qt::Key_Enter) {
+        return;
     } else {
         QDialog::keyPressEvent(event);
     }

@@ -55,7 +55,6 @@ private:
     void write_buffer_to_console(bool overwrite=false);
 
     int row_count;
-    std::vector<std::string> instruction_data;
     MemoryTableManager *memory_table;
 
     std::string line_split;

@@ -28,6 +28,7 @@ signals:
 private slots:
     void handle_acceptButton_clicked();
     void handle_cancelButton_clicked();
+    void validate_rgb_input(const QString &text);
 
 private:
     Ui::SettingsDialog *ui;

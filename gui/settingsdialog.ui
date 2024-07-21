@@ -19,7 +19,7 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QLabel" name="primaryColorLabel">
+  <widget class="QLabel" name="primary00ColorLabel">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -44,7 +44,7 @@
     <string>Primary Color:</string>
    </property>
   </widget>
-  <widget class="QLabel" name="secondaryColorLabel">
+  <widget class="QLabel" name="secondary00ColorLabel">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -69,7 +69,7 @@
     <string>Secondary Color:</string>
    </property>
   </widget>
-  <widget class="QLabel" name="primaryRLabel">
+  <widget class="QLabel" name="primary01RLabel">
    <property name="geometry">
     <rect>
      <x>160</x>
@@ -96,8 +96,11 @@
    <property name="alignment">
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
    </property>
+   <property name="buddy">
+    <cstring>primary01RLineEdit</cstring>
+   </property>
   </widget>
-  <widget class="QLabel" name="secondaryRLabel">
+  <widget class="QLabel" name="secondary01RLabel">
    <property name="geometry">
     <rect>
      <x>160</x>
@@ -124,8 +127,11 @@
    <property name="alignment">
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
    </property>
+   <property name="buddy">
+    <cstring>secondary01RLineEdit</cstring>
+   </property>
   </widget>
-  <widget class="QLabel" name="primaryGLabel">
+  <widget class="QLabel" name="primary02GLabel">
    <property name="geometry">
     <rect>
      <x>260</x>
@@ -152,8 +158,11 @@
    <property name="alignment">
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
    </property>
+   <property name="buddy">
+    <cstring>primary02GLineEdit</cstring>
+   </property>
   </widget>
-  <widget class="QLabel" name="secondaryGLabel">
+  <widget class="QLabel" name="secondary02GLabel">
    <property name="geometry">
     <rect>
      <x>260</x>
@@ -180,8 +189,11 @@
    <property name="alignment">
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
    </property>
+   <property name="buddy">
+    <cstring>secondary02GLineEdit</cstring>
+   </property>
   </widget>
-  <widget class="QLabel" name="primaryBLabel">
+  <widget class="QLabel" name="primary03BLabel">
    <property name="geometry">
     <rect>
      <x>360</x>
@@ -208,8 +220,11 @@
    <property name="alignment">
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
    </property>
+   <property name="buddy">
+    <cstring>primary03BLineEdit</cstring>
+   </property>
   </widget>
-  <widget class="QLabel" name="secondaryBLabel">
+  <widget class="QLabel" name="secondary03BLabel">
    <property name="geometry">
     <rect>
      <x>360</x>
@@ -235,6 +250,9 @@
    </property>
    <property name="alignment">
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   </property>
+   <property name="buddy">
+    <cstring>secondary03BLineEdit</cstring>
    </property>
   </widget>
   <widget class="QPushButton" name="acceptButton">
@@ -281,7 +299,7 @@
     <string>Cancel</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="primaryRLineEdit">
+  <widget class="QLineEdit" name="primary01RLineEdit">
    <property name="geometry">
     <rect>
      <x>190</x>
@@ -305,11 +323,14 @@
    <property name="text">
     <string>76</string>
    </property>
+   <property name="maxLength">
+    <number>255</number>
+   </property>
    <property name="frame">
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QLineEdit" name="secondaryRLineEdit">
+  <widget class="QLineEdit" name="secondary01RLineEdit">
    <property name="geometry">
     <rect>
      <x>190</x>
@@ -333,11 +354,14 @@
    <property name="text">
     <string>255</string>
    </property>
+   <property name="maxLength">
+    <number>255</number>
+   </property>
    <property name="frame">
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QLineEdit" name="primaryGLineEdit">
+  <widget class="QLineEdit" name="primary02GLineEdit">
    <property name="geometry">
     <rect>
      <x>290</x>
@@ -361,11 +385,14 @@
    <property name="text">
     <string>114</string>
    </property>
+   <property name="maxLength">
+    <number>255</number>
+   </property>
    <property name="frame">
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QLineEdit" name="primaryBLineEdit">
+  <widget class="QLineEdit" name="primary03BLineEdit">
    <property name="geometry">
     <rect>
      <x>390</x>
@@ -389,11 +416,14 @@
    <property name="text">
     <string>29</string>
    </property>
+   <property name="maxLength">
+    <number>255</number>
+   </property>
    <property name="frame">
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QLineEdit" name="secondaryGLineEdit">
+  <widget class="QLineEdit" name="secondary02GLineEdit">
    <property name="geometry">
     <rect>
      <x>290</x>
@@ -417,11 +447,14 @@
    <property name="text">
     <string>255</string>
    </property>
+   <property name="maxLength">
+    <number>255</number>
+   </property>
    <property name="frame">
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QLineEdit" name="secondaryBLineEdit">
+  <widget class="QLineEdit" name="secondary03BLineEdit">
    <property name="geometry">
     <rect>
      <x>390</x>
@@ -445,8 +478,14 @@
    <property name="text">
     <string>225</string>
    </property>
+   <property name="maxLength">
+    <number>255</number>
+   </property>
    <property name="frame">
     <bool>true</bool>
+   </property>
+   <property name="clearButtonEnabled">
+    <bool>false</bool>
    </property>
   </widget>
   <widget class="QGroupBox" name="groupBox">
@@ -472,23 +511,33 @@
    </property>
   </widget>
   <zorder>groupBox</zorder>
-  <zorder>primaryColorLabel</zorder>
-  <zorder>secondaryColorLabel</zorder>
-  <zorder>primaryRLabel</zorder>
-  <zorder>secondaryRLabel</zorder>
-  <zorder>primaryGLabel</zorder>
-  <zorder>secondaryGLabel</zorder>
-  <zorder>primaryBLabel</zorder>
-  <zorder>secondaryBLabel</zorder>
+  <zorder>primary00ColorLabel</zorder>
+  <zorder>secondary00ColorLabel</zorder>
+  <zorder>primary01RLabel</zorder>
+  <zorder>secondary01RLabel</zorder>
+  <zorder>primary02GLabel</zorder>
+  <zorder>secondary02GLabel</zorder>
+  <zorder>primary03BLabel</zorder>
+  <zorder>secondary03BLabel</zorder>
   <zorder>acceptButton</zorder>
   <zorder>cancelButton</zorder>
-  <zorder>primaryRLineEdit</zorder>
-  <zorder>secondaryRLineEdit</zorder>
-  <zorder>primaryGLineEdit</zorder>
-  <zorder>primaryBLineEdit</zorder>
-  <zorder>secondaryGLineEdit</zorder>
-  <zorder>secondaryBLineEdit</zorder>
+  <zorder>primary01RLineEdit</zorder>
+  <zorder>secondary01RLineEdit</zorder>
+  <zorder>primary02GLineEdit</zorder>
+  <zorder>primary03BLineEdit</zorder>
+  <zorder>secondary02GLineEdit</zorder>
+  <zorder>secondary03BLineEdit</zorder>
  </widget>
+ <tabstops>
+  <tabstop>primary01RLineEdit</tabstop>
+  <tabstop>primary02GLineEdit</tabstop>
+  <tabstop>primary03BLineEdit</tabstop>
+  <tabstop>secondary01RLineEdit</tabstop>
+  <tabstop>secondary02GLineEdit</tabstop>
+  <tabstop>secondary03BLineEdit</tabstop>
+  <tabstop>acceptButton</tabstop>
+  <tabstop>cancelButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
