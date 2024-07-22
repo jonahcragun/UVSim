@@ -9,7 +9,7 @@
 
 // read word into specified memory index of main_memory
 template <size_t SIZE>
-void read(std::istream& is, short (&main_memory)[SIZE], short mem_addr) {
+void read(std::istream& is, int (&main_memory)[SIZE], int mem_addr) {
     std::ostringstream throw_context;
     if (mem_addr < 0 || static_cast<size_t>(mem_addr) >= SIZE) {
         throw std::out_of_range("READ Error: Memory address [" + std::to_string(mem_addr) + "] is out of range.\n");
@@ -34,15 +34,15 @@ void read(std::istream& is, short (&main_memory)[SIZE], short mem_addr) {
 
     bool overwrite_warning = (abs(main_memory[mem_addr]) == 4300) ? true : false;
     bool size_warning = false;
-    if (instruction_length > 4) {
+    if (instruction_length > 6) {
         if (input[0] == '-' || input[0] == '+') {
             // Only keep the first 5 characters
-            size_warning = (instruction_length > 5) ? true : false;
-            input = input.substr(0, 5);
+            size_warning = (instruction_length > 7) ? true : false;
+            input = input.substr(0, 7);
         } else {
             // Only keep the first 4 characters
-            size_warning = (instruction_length > 4) ? true : false;
-            input = input.substr(0, 4);
+            size_warning = (instruction_length > 6) ? true : false;
+            input = input.substr(0, 6);
         }
     }
 
@@ -52,14 +52,14 @@ void read(std::istream& is, short (&main_memory)[SIZE], short mem_addr) {
             continue;
         }
         if (!isdigit(c)) {
-            throw_context << "READ Error: Invalid format encountered '" << input << "'. Must be a sequence of 4 digits." << std::endl;
+            throw_context << "READ Error: Invalid format encountered '" << input << "'. Must be a sequence of 6 digits." << std::endl;
             throw std::invalid_argument(throw_context.str());
         }
     }
     main_memory[mem_addr] = std::stoi(input);
     if (size_warning || overwrite_warning) {
         if (size_warning) {
-            throw_context << "READ Warning: Input character count too large. Only the first 4 signed digits sequence: '"
+            throw_context << "READ Warning: Input character count too large. Only the first 6 signed digits sequence: '"
                           << input << "' from '" << original_input << "' will attempt to be stored.\n";
         }
         if (overwrite_warning) {
@@ -72,7 +72,7 @@ void read(std::istream& is, short (&main_memory)[SIZE], short mem_addr) {
 
 // write word from specified memory index to terminal
 template <size_t SIZE>
-void write(std::ostream& os, short (&main_memory)[SIZE], short mem_addr) {
+void write(std::ostream& os, int (&main_memory)[SIZE], int mem_addr) {
     if (mem_addr < 0 || static_cast<size_t>(mem_addr) >= SIZE) {
         throw std::out_of_range("WRITE Error: Memory address [" + std::to_string(mem_addr) + "] is out of range.\n");
     }
@@ -80,7 +80,7 @@ void write(std::ostream& os, short (&main_memory)[SIZE], short mem_addr) {
 }
 
 template <size_t SIZE>
-void write(OutputHandler& os, short (&main_memory)[SIZE], short mem_addr) {
+void write(OutputHandler& os, int (&main_memory)[SIZE], int mem_addr) {
     if (mem_addr < 0 || static_cast<size_t>(mem_addr) >= SIZE) {
         throw std::out_of_range("WRITE Error: Memory address [" + std::to_string(mem_addr) + "] is out of range.\n");
     }

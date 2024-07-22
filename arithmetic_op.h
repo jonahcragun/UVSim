@@ -2,10 +2,10 @@
 #define ARITHMETIC_OP_H
 
 //Function declaration for arithmetic operations
-void divide(short& accumulator, short* main_memory, short mem_addr);
-void multiply(short& accumulator, short* main_memory, short mem_addr);
-void add(short& accumulator, short* main_memory, short mem_addr);
-void subtract(short& accumulator, short* main_memory, short mem_addr);
+void divide(int& accumulator, int* main_memory, int mem_addr);
+void multiply(int& accumulator, int* main_memory, int mem_addr);
+void add(int& accumulator, int* main_memory, int mem_addr);
+void subtract(int& accumulator, int* main_memory, int mem_addr);
 
-void checkOverflow(short& accumulator);
+void checkOverflow(int& accumulator);
 #endif

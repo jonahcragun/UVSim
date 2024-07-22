@@ -4,12 +4,12 @@
 
 #include <stdexcept>
 
-short halt() {
+int halt() {
 	return MEMORY_SIZE;
 }
 
 // If the accumulator is a negative value, return to the potential memory address. Else return the current memory address incremented
-short branchNeg(short& accumulator, short cur_addr, short br_target) {
+int branchNeg(int& accumulator, int cur_addr, int br_target) {
     if (br_target < 0 || br_target >= MEMORY_SIZE) {
         throw std::out_of_range("BRANCHNEG Error: Memory address " + std::to_string(br_target) + " is out of range.\n");
     }
@@ -17,7 +17,7 @@ short branchNeg(short& accumulator, short cur_addr, short br_target) {
 }
 
 // If the accumulator equals zero, return to the potential memory address. Else return the current memory address incremented
-short branchZero(short& accumulator, short cur_addr, short br_target){
+int branchZero(int& accumulator, int cur_addr, int br_target){
     if (br_target < 0 || br_target >= MEMORY_SIZE) {
         throw std::out_of_range("BRANCHZERO Error: Memory address " + std::to_string(br_target) + " is out of range.\n");
     }
@@ -25,7 +25,7 @@ short branchZero(short& accumulator, short cur_addr, short br_target){
 }
 
 // Return the memory address to switch the current memory address
-short branch(short br_target) {
+int branch(int br_target) {
     if (br_target < 0 || br_target >= MEMORY_SIZE) {
         throw std::out_of_range("BRANCH Error: Memory address " + std::to_string(br_target) + " is out of range.\n");
     }

@@ -1,9 +1,9 @@
 #ifndef CONTROL_OP_H
 #define CONTROL_OP_H
 
-short halt();
-short branchNeg(short& accumulator, short cur_addr, short br_target);
-short branchZero(short& accumulator, short cur_addr, short br_target);
-short branch(short br_target);
+int halt();
+int branchNeg(int& accumulator, int cur_addr, int br_target);
+int branchZero(int& accumulator, int cur_addr, int br_target);
+int branch(int br_target);
 
 #endif
