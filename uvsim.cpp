@@ -13,7 +13,7 @@
 // Reset memory to 0
 void UVSim::reset_memory() {
     accumulator = 0;
-    for (short& mem_addr : main_memory) {
+    for (int& mem_addr : main_memory) {
         mem_addr = 0;
     }
 }
@@ -22,16 +22,16 @@ void UVSim::reset_memory() {
 // Param 1: instruction
 // Param 2: pointer to op code value
 // Param 3: pointer to mem addr value
-void UVSim::split_instr(short instr, short* op_code, short* mem_addr) {
+void UVSim::split_instr(int instr, int* op_code, int* mem_addr) {
     instr = abs(instr);
-    *op_code = instr / 100;
-    *mem_addr = instr % 100;
+    *op_code = instr / 1000;
+    *mem_addr = instr % 1000;
 }
 
 // Put instructions into memory. Only accept 4 digits and sign.
 // Param 1: Vector of full lines from the file
 void UVSim::parse_input(std::vector<std::string>& lines){
-    if (lines.size() > 100) {
+    if (lines.size() > MEMORY_SIZE) {
         *output_handler << "INSTRUCTIONS SIZE Error: Passed instructions are too long at count of '"
                         << lines.size() << "'. Cannot exceed " << std::to_string(MEMORY_SIZE)
                         << " instructions." << std::endl;
@@ -55,10 +55,10 @@ void UVSim::parse_input(std::vector<std::string>& lines){
 
 // Run program starting at memory location 00
 void UVSim::execute() {
-    short op_code;
-    short mem_addr;
+    int op_code;
+    int mem_addr;
 
-    for (unsigned short current_memory_address = 0; current_memory_address < MEMORY_SIZE;
+    for (unsigned int current_memory_address = 0; current_memory_address < MEMORY_SIZE;
          current_memory_address = execute_op(op_code, mem_addr, current_memory_address)) {
 
         split_instr(main_memory[current_memory_address], &op_code, &mem_addr);
@@ -67,7 +67,7 @@ void UVSim::execute() {
 
 // Execute operation associated with op code
 // Return next memory address to run
-unsigned short UVSim::execute_op(short op_code, short mem_addr, unsigned short cur_mem_addr) {
+unsigned int UVSim::execute_op(int op_code, int mem_addr, unsigned int cur_mem_addr) {
     try{
         bool can_exit = false;
 
@@ -147,17 +147,17 @@ unsigned short UVSim::execute_op(short op_code, short mem_addr, unsigned short c
 }
 
 // Get accumulator value
-short& UVSim::get_accumulator() {
+int& UVSim::get_accumulator() {
     return accumulator;
 }
 
 // Get memory array
-short* UVSim::get_memory() {
+int* UVSim::get_memory() {
     return main_memory;
 }
 
 // Get memory value at a specific location
-short UVSim::get_memory_value(short mem_addr) {
+int UVSim::get_memory_value(int mem_addr) {
     if (mem_addr < 0 || mem_addr >= MEMORY_SIZE) {
         throw std::out_of_range("GET_MEMORY_VALUE Error: Memory address " + std::to_string(mem_addr)
         + " is out of range.\n");
@@ -166,7 +166,7 @@ short UVSim::get_memory_value(short mem_addr) {
 }
 
 // Set memory at a specific location
-void UVSim::set_memory_address(short mem_addr, short value) {
+void UVSim::set_memory_address(int mem_addr, int value) {
     if (mem_addr < 0 || mem_addr >= MEMORY_SIZE) {
         throw std::out_of_range("SET_MEMORY_VALUE Error: Memory address " + std::to_string(mem_addr)
         + " is out of range.\n");
@@ -176,7 +176,7 @@ void UVSim::set_memory_address(short mem_addr, short value) {
 
 
 // Set accumulator to a specific value
-void UVSim::set_accumulator(short value) {
+void UVSim::set_accumulator(int value) {
     accumulator = value;
 }
 

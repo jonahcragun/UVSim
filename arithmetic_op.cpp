@@ -4,12 +4,12 @@
 #include <string>
 
 // Function to check for overflow
-void checkOverflow(short& accumulator) {
+void checkOverflow(int& accumulator) {
     accumulator = (accumulator < -9999 || accumulator > 9999) ? accumulator % 10000 : accumulator;
 }
 
 // Divide the value in the memory to the accumulator
-void divide(short& accumulator, short* main_memory, short mem_addr) {
+void divide(int& accumulator, int* main_memory, int mem_addr) {
     if (mem_addr < 0 || mem_addr >= MEMORY_SIZE) {
         throw std::out_of_range("DIVIDE Error: Memory address " + std::to_string(mem_addr) + " is out of range.\n");
     }
@@ -21,7 +21,7 @@ void divide(short& accumulator, short* main_memory, short mem_addr) {
 }
 
 // Multiply the value in the memory to the accumulator
-void multiply(short& accumulator, short* main_memory, short mem_addr) {
+void multiply(int& accumulator, int* main_memory, int mem_addr) {
     if (mem_addr < 0 || mem_addr >= MEMORY_SIZE) {
         throw std::out_of_range("MULTIPLY Error: Memory address " + std::to_string(mem_addr) + " is out of range.\n");
     }
@@ -30,7 +30,7 @@ void multiply(short& accumulator, short* main_memory, short mem_addr) {
 }
 
 // Add the value in the memory address to the accumulator
-void add(short& accumulator, short* main_memory, short mem_addr) {
+void add(int& accumulator, int* main_memory, int mem_addr) {
     if (mem_addr < 0 || mem_addr >= MEMORY_SIZE) {
         throw std::out_of_range("ADD Error: Memory address " + std::to_string(mem_addr) + " is out of range.\n");
     }
@@ -39,7 +39,7 @@ void add(short& accumulator, short* main_memory, short mem_addr) {
 }
 
 // Subtract the value in the memory address from the accumulator
-void subtract(short& accumulator, short* main_memory, short mem_addr) {
+void subtract(int& accumulator, int* main_memory, int mem_addr) {
     if (mem_addr < 0 || mem_addr >= MEMORY_SIZE) {
         throw std::out_of_range("SUBTRACT Error: Memory address " + std::to_string(mem_addr) + " is out of range.\n");
     }

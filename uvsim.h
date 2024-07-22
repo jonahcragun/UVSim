@@ -11,25 +11,25 @@
 // has a memory array and accumulator register
 class UVSim {
 private:
-    short main_memory[MEMORY_SIZE];
-    short accumulator;
+    int main_memory[MEMORY_SIZE];
+    int accumulator;
 
     InputHandler* input_handler;
     OutputHandler* output_handler;
 
     void reset_memory();
     void execute();
-    void split_instr(short instr, short* op_code, short* mem_addr);
+    void split_instr(int instr, int* op_code, int* mem_addr);
     void parse_input(std::vector<std::string>& lines);
 
 public:
-    unsigned short execute_op(short op_code, short mem_addr, unsigned short cur);
-    short& get_accumulator();
-    short* get_memory();
-    short get_memory_value(short mem_addr);
+    unsigned int execute_op(int op_code, int mem_addr, unsigned int cur);
+    int& get_accumulator();
+    int* get_memory();
+    int get_memory_value(int mem_addr);
 
-    void set_accumulator(short value);
-    void set_memory_address(short mem_addr, short value);
+    void set_accumulator(int value);
+    void set_memory_address(int mem_addr, int value);
     void run();
 
     UVSim(InputHandler* handler_in, OutputHandler* handler_out);
