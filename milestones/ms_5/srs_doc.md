@@ -37,5 +37,5 @@
 2. The system shall execute each instruction within 1 second under normal operational conditions
 3. The system shall have a user interface that distinguishes each field and its functionality
 4. The system shall ensure files loaded or edited do not exceed 250 lines.
-5. The system shall validate commands to ensure they reference valid address (000 t0 249).
+5. The system shall validate commands to ensure they reference valid address (000 to 249).
  
