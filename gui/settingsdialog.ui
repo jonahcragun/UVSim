@@ -488,7 +488,7 @@
     <bool>false</bool>
    </property>
   </widget>
-  <widget class="QGroupBox" name="groupBox">
+  <widget class="QGroupBox" name="colorSettingsGroupBox">
    <property name="enabled">
     <bool>true</bool>
    </property>
@@ -509,8 +509,11 @@
    <property name="title">
     <string>GUI Color Scheme</string>
    </property>
+   <property name="flat">
+    <bool>false</bool>
+   </property>
   </widget>
-  <zorder>groupBox</zorder>
+  <zorder>colorSettingsGroupBox</zorder>
   <zorder>primary00ColorLabel</zorder>
   <zorder>secondary00ColorLabel</zorder>
   <zorder>primary01RLabel</zorder>

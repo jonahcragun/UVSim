@@ -235,6 +235,8 @@ void MainWindow::handle_input_from_settings(const int &primary_r, const int &pri
                               "QTableWidget { background-color: %4; color: %2; }"
                               "QTableWidget::item { border: 1px solid %3; }"
                               "QHeaderView::section { background-color: %2; color: %1; }"
+                              "QGroupBox { color: %2; border: 1px solid %2; border-radius: 5px; margin-top: 1ex; }"
+                              "QGroupBox::title { subcontrol-origin: margin; subcontrol-position: top left; padding: 0 3px; left: 10px; margin-left: 1px; }"
                               ).arg(
                                   secondary_color,          // %1
                                   primary_color,            // %2
