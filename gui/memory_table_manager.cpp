@@ -55,6 +55,9 @@ void MemoryTableManager::setup_tab_widget() {
     }
 
     add_new_tab();
+
+    active_table_widget = memory_table_widgets[0];
+    active_table_data = &memory_tables_data[0];
 }
 
 void MemoryTableManager::set_row_count(int count) {
@@ -121,13 +124,6 @@ void MemoryTableManager::set_editable_flag(bool editable) {
     for (int instruction_index = 0; instruction_index < row_count; ++instruction_index) {
         QTableWidgetItem *item = active_table_widget->item(instruction_index, 1); // Column 1: Instruction
         if (item) {
-            /*
-            if (editable) {
-                item->setFlags(item->flags() | Qt::ItemIsEditable);
-            } else {
-                item->setFlags(item->flags() & ~Qt::ItemIsEditable);
-            }
-            */
             (editable) ? item->setFlags(item->flags() | Qt::ItemIsEditable) : item->setFlags(item->flags() & ~Qt::ItemIsEditable);
         }
     }

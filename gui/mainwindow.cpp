@@ -117,9 +117,10 @@ void MainWindow::handle_importButton_clicked() {
     console_buffer << line_split << "Validating new instructions...\n";
     write_buffer_to_console();
 
+    memory_table->reset_data(0, size_cap);
+
     // Temporarily block signals to avoid recursion
     memory_table->set_input_block_signals_flag(true);
-    memory_table->reset_data(0, size_cap);
     for (size_t instruction_index = 0; instruction_index < last_set_index; ++instruction_index) {
         try {
             input_handler->validate_instruction(file_import_data[instruction_index]);
