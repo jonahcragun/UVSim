@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <stdexcept>
 #include <sstream>
+#include <algorithm>
 #include <cctype>
 
 bool isInstr(std::string& instruction){

@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->runButton, &QPushButton::clicked, this, &MainWindow::handle_runButton_clicked);
     connect(ui->settingsButton, &QPushButton::clicked, this, &MainWindow::handle_settingsButton_clicked);
 
-    memory_table = new MemoryTableManager(ui->memoryTableTabs, row_count, this);
+    memory_table = new MemoryTableManager(ui->memoryTableTabs, 10, row_count, this);
     connect(memory_table, &MemoryTableManager::input_submitted, this, &MainWindow::handle_input_from_memory_table);
 
     settings_dialog = new SettingsDialog(this);
@@ -118,7 +118,7 @@ void MainWindow::handle_importButton_clicked() {
     write_buffer_to_console();
 
     // Temporarily block signals to avoid recursion
-    memory_table->set_block_signals_flag(true);
+    memory_table->set_input_block_signals_flag(true);
     memory_table->reset_data(0, size_cap);
     for (size_t instruction_index = 0; instruction_index < last_set_index; ++instruction_index) {
         try {
@@ -129,10 +129,10 @@ void MainWindow::handle_importButton_clicked() {
             write_buffer_to_console();
         }
     }
-    memory_table->update();
+    memory_table->update_active_table();
 
     // Restore signal unblocked state
-    memory_table->set_block_signals_flag(false);
+    memory_table->set_input_block_signals_flag(false);
 
     if (!memory_table->get_data().empty()) {
         write_to_console("Validation Complete.");
@@ -150,7 +150,7 @@ void MainWindow::handle_exportButton_clicked(){
 
 void MainWindow::handle_runButton_clicked(){
     // Temporarily block signals to avoid recursion
-    memory_table->set_block_signals_flag(true);
+    memory_table->set_input_block_signals_flag(true);
     // Block edits from being made during runtime
     memory_table->set_editable_flag(false);
     try {
@@ -174,7 +174,7 @@ void MainWindow::handle_runButton_clicked(){
     // Restore editable state
     memory_table->set_editable_flag(true);
     // Restore signal unblocked state
-    memory_table->set_block_signals_flag(false);
+    memory_table->set_input_block_signals_flag(false);
 }
 
 void MainWindow::handle_settingsButton_clicked(){
@@ -194,7 +194,7 @@ void MainWindow::handle_input_from_memory_table(QTableWidgetItem *item){
         std::string new_instruction = new_value.toStdString();
 
         // Temporarily block signals to avoid recursion
-        memory_table->set_block_signals_flag(true);
+        memory_table->set_input_block_signals_flag(true);
 
         try {
             input_handler->validate_instruction(new_instruction);
@@ -207,7 +207,7 @@ void MainWindow::handle_input_from_memory_table(QTableWidgetItem *item){
         }
 
         // Restore signal blocking state
-        memory_table->set_block_signals_flag(false);
+        memory_table->set_input_block_signals_flag(false);
     }
 }
 
