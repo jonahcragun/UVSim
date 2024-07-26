@@ -131,11 +131,13 @@ All the information in the UVSim is handled in terms of words. A **word** is a s
 
 1. Locate the tab you want to close (to the left of the Memory Address column, above the "+" symbol)
 
-2. Locate the "x" symbol that is attached to the bottom of that tabs name
+2. Locate the "x" symbol that is attached to the top of that tabs name
 
 3. Using the cursor, click the "x" symbol
 
 4. That tab should now be closed and now longer appear next to the other tabs
+
+- Note: The "x" sybol will not be present if there is only 1 existing tab. This is because there must always be at least 1 open tab.
 
 ---
 
