@@ -3,9 +3,14 @@
 #include <stdexcept>
 #include <string>
 
-// Function to check for overflow
+// Function to check for overflow with six-digit
 void checkOverflow(int& accumulator) {
-    accumulator = (accumulator < -9999 || accumulator > 9999) ? accumulator % 10000 : accumulator;
+    if (accumulator < MIN_VALUE || accumulator > MAX_VALUE) {
+        accumulator %= 1000000; // Ensure the accumulator is within six digits
+        if (accumulator < MIN_VALUE) {
+            accumulator += 1000000; // Adjust if the value is still negative
+        }
+    }
 }
 
 // Divide the value in the memory to the accumulator
