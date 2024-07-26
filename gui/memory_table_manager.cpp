@@ -211,9 +211,7 @@ void MemoryTableManager::add_new_tab() {
     }
 
     QTableWidget *table_widget = memory_table_widgets[tab_index];
-    tab_index = tab_widget->addTab(table_widget, QString("tab"));
-
-    qDebug() << "CREATED TAB AT: " << tab_index;
+    tab_widget->addTab(table_widget, QString("tab"));
 
     QWidget *create_tab = new QWidget();
     int create_tab_index = tab_widget->addTab(create_tab, "+");
@@ -261,7 +259,6 @@ void MemoryTableManager::handle_item_changed(QTableWidgetItem *item) {
 void MemoryTableManager::handle_tab_changed(int index) {
     if (!tab_signals_blocked){
         set_tab_block_signals_flag(true);
-        qDebug() << "handle_tab_changed index passed: " << index;
         int tab_count = tab_widget->count();
         if(tab_count - 1 == index && tab_widget->tabText(index) == "+"){
             add_new_tab();
@@ -273,7 +270,6 @@ void MemoryTableManager::handle_tab_changed(int index) {
 }
 
 void MemoryTableManager::handle_tab_close(int index) {
-    qDebug() << "handle_tab_close index passed: " << index;
     set_tab_block_signals_flag(true);
 
     int tab_count = tab_widget->count();
@@ -290,8 +286,6 @@ void MemoryTableManager::handle_tab_close(int index) {
     memory_tables_data.erase(memory_tables_data.begin() + index);
     memory_tables_data.emplace_back(std::vector<std::string>(row_count, "+000000"));
 
-    qDebug() << "REMOVING INDEX: " << index;
-
     tab_widget->removeTab(index);
     tab_count = tab_widget->count();
 
@@ -302,9 +296,7 @@ void MemoryTableManager::handle_tab_close(int index) {
 
     int current_tab = -1;
     int selected_tab = -1;
-    qDebug() << "TAB COUNT: " << tab_count << "MAX: " << max_tabs - 1;
     if (tab_count == max_tabs - 2 && tab_widget->tabText(tab_count - 1) != "+"){
-        qDebug() << "adding +: " << max_tabs - 1;
         QWidget *create_tab = new QWidget();
         int create_tab_index = tab_widget->addTab(create_tab, "+");
         tab_widget->tabBar()->setTabButton(create_tab_index, QTabBar::RightSide, nullptr);

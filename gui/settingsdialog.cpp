@@ -65,7 +65,7 @@ void SettingsDialog::validate_rgb_input(const QString &text)
                                "Must be a valid RGB value between 0-255",
                                line_edit);
 
-            line_edit->setText("");
+            line_edit->setText("0");
         }
     }
 }
