@@ -2,7 +2,9 @@
 
 **UVSim** is a simple virtual machine used to help users execute their own machine language basicML code. It contains a CPU, register, and main memory. An accumulator – a register into which information is put before the UVSim uses it in calculations or examines it in various ways.
 
-All the information in the UVSim is handled in terms of words. A **word** is a signed four-digit decimal number, such as +1234, -5678. The UVSim is equipped with a 100-word memory, and these words are referenced by their location numbers 00, 01, ..., 99. The BasicML program must be loaded into the main memory starting at location 00 before executing. Each instruction written in BasicML occupies one word of the UVSim memory (instruction are signed four-digit decimal number). We shall assume that the sign of a BasicML instruction is always plus, but the sign of a data word may be either plus or minus. Each location in the UVSim memory may contain an instruction, a data value used by a program or an unused area of memory. The first two digits of each BasicML instruction are the operation code specifying the operation to be performed.
+All the information in the UVSim is handled in terms of words. A **word** is a signed six-digit decimal number, such as +123400, -567800. The UVSim is equipped with a 255-word memory, and these words are referenced by their location numbers 000, 01, ..., 254. The BasicML program must be loaded into the main memory starting at location 00 before executing. Each instruction written in BasicML occupies one word of the UVSim memory (instruction are signed six-digit decimal number). We shall assume that the sign of a BasicML instruction is always plus, but the sign of a data word may be either plus or minus. Each location in the UVSim memory may contain an instruction, a data value used by a program or an unused area of memory. The first three digits of each BasicML instruction are the operation code specifying the operation to be performed.
+
+- Note: This guide focuses on the six=digit architecture, but the old four-digit architecture is still supported. If you have files that were written with 4 digit words, uploading them to this virtual machine will automatically convert them to six-digits, then they can be run as normal.
 
 ---
 
@@ -103,7 +105,38 @@ All the information in the UVSim is handled in terms of words. A **word** is a s
 2. Enter values in the text field associated with R, G, or B for the desired color
 
 3. When all values have been entered, click accept (using the cursor) to update the theme of the application
- 
+
+- Note: values entered need to be numbers between 0 and 255 
+
+#### Adding a New Tabs
+
+1. Locate the "+" symbol on the left side of the Memory Address column (The large rectangle on the left side of the screen)
+
+2. Using the cursor, click on the "+" symbol
+
+3. A new tab should now be created and you should see it appear above the "+" symbol
+
+#### Changing tabs
+
+1. After you have added a new tab, locate your existing tabs (to the left of the Memory Address column, above the "+" symbol)
+
+2. Using the cursor, click on the tab you want to change to
+
+3. The tab should now change colors to indicate it is the active tab
+
+- Note: Any modifications done in a particular tab will not effect other tabs
+- Note: Running a program will run the contents from only the active tab
+
+#### Closing a tab
+
+1. Locate the tab you want to close (to the left of the Memory Address column, above the "+" symbol)
+
+2. Locate the "x" symbol that is attached to the bottom of that tabs name
+
+3. Using the cursor, click the "x" symbol
+
+4. That tab should now be closed and now longer appear next to the other tabs
+
 ---
 
 ### <u>Installation (for terminal based application)</u>
@@ -150,17 +183,17 @@ All the information in the UVSim is handled in terms of words. A **word** is a s
 
 As a final step before executing, you will need to create a plain text file with the extension `.txt` that contains lines of BasicML code you want to run in the UVSim.
 
-All values should be in the following format of a signed four-digit decimal number (5 positional characters with the first being a plus or minus symbol followed by 4 digits, each being an integer between 0-9) and should be separated onto their own line:
+All values should be in the following format of a signed six-digit decimal number (7 positional characters with the first being a plus or minus symbol followed by 6 digits, each being an integer between 0-9) and should be separated onto their own line:
 
 > ±####
 
 <u>Example:</u>
 
 ```plaintext
-+1007
-+1008
-+0000
-+0000
++010007
++010008
++000000
++000000
 ```
 
 For any lines that are meant to be instructions and not simply numeric values, you will still follow the same signed four-digit decimal number format but with the following structure: 
@@ -179,24 +212,24 @@ For a list of available opcodes and their descriptions, please refer to the Oper
 <u>Operation Codes:</u>
 
 > **I/O operations:**  
-**10:** READ – *Read a word from the keyboard into a specific location in memory.*  
-**11:** WRITE – *Write a word from a specific location in memory to screen.*
+**010:** READ – *Read a word from the keyboard into a specific location in memory.*  
+**011:** WRITE – *Write a word from a specific location in memory to screen.*
 
 >  **Load/store operations:**  
-**20:** LOAD – *Load a word from a specific location in memory into the accumulator.*  
-**21:** STORE – *Store a word from the accumulator into a specific location in memory.*
+**020:** LOAD – *Load a word from a specific location in memory into the accumulator.*  
+**021:** STORE – *Store a word from the accumulator into a specific location in memory.*
 
 > **Arithmetic operations:**  
-**30:** ADD – *Add a word from a specific location in memory to the word in the accumulator (leave the result in the accumulator).*  
-**31:** SUBTRACT – *Subtract a word from a specific location in memory from the word in the accumulator (leave the result in the accumulator).*  
-**32:** DIVIDE – *Divide the word in the accumulator by a word from a specific location in memory (leave the result in the accumulator).*  
-**33:** MULTIPLY – *Multiply a word from a specific location in memory to the word in the accumulator (leave the result in the accumulator).*
+**030:** ADD – *Add a word from a specific location in memory to the word in the accumulator (leave the result in the accumulator).*  
+**031:** SUBTRACT – *Subtract a word from a specific location in memory from the word in the accumulator (leave the result in the accumulator).*  
+**032:** DIVIDE – *Divide the word in the accumulator by a word from a specific location in memory (leave the result in the accumulator).*  
+**033:** MULTIPLY – *Multiply a word from a specific location in memory to the word in the accumulator (leave the result in the accumulator).*
 
 > **Control operations:**  
-**40:** BRANCH – *Branch to a specific location in memory.*  
-**41:** BRANCHNEG – *Branch to a specific location in memory if the accumulator is negative.*  
-**42:** BRANCHZERO – *Branch to a specific location in memory if the accumulator is zero.*  
-**43:** HALT – *Stop the program.*
+**040:** BRANCH – *Branch to a specific location in memory.*  
+**041:** BRANCHNEG – *Branch to a specific location in memory if the accumulator is negative.*  
+**042:** BRANCHZERO – *Branch to a specific location in memory if the accumulator is zero.*  
+**043:** HALT – *Stop the program.*
 
 ---
 
