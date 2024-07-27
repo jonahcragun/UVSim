@@ -250,3 +250,4 @@ UVSim is designed to be user-friendly and educational, making it an ideal tool f
 | Test 25   | Tests reading in a correct file              | Use Case 13        | None   | Correct output result      | Will correctly read in the file and execute the instructions                             |
 | Test 26   | Tests reading in a bad file                  | Use Case 13        | None   | Error thrown               | Will correctly throw an error when reading in a bad file                                 |
 | Test 27   | Tests reading in a missing file              | Use Case 13        | None   | Error thrown               | Will correctly throw an error when reading in a missing file                             |
+| Test 28   | Tests file load and conversion to six-digit instructions              | Use Case 13        | None   | Successful load and conversion               | Will correctly load and convert the file to six-digit instructions                             |
