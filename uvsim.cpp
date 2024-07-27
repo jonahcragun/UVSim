@@ -195,3 +195,32 @@ void UVSim::run() {
 UVSim::UVSim(InputHandler* handler_in, OutputHandler* hanlder_out) : input_handler(handler_in), output_handler(hanlder_out) {
     reset_memory();
 }
+
+void load_instructions_from_file(const std::string& filename, UVSim& uvsim) {
+    std::ifstream file(filename);
+    if (!file.is_open()) {
+        throw std::runtime_error("Failed to open file: " + filename);
+    }
+
+    std::string line;
+    int address = 0; // Starting address in memory
+
+    while (std::getline(file, line)) {
+        if (line.empty()) continue; // Skip empty lines
+
+        // Convert the line to a six-digit instruction
+        int instruction;
+        std::istringstream iss(line);
+        if (!(iss >> instruction) || instruction < 0 || instruction > 999999) {
+            throw std::runtime_error("Invalid instruction format in file: " + filename);
+        }
+
+        if (address >= MEMORY_SIZE) {
+            throw std::runtime_error("Memory overflow: too many instructions for memory size.");
+        }
+
+        uvsim.set_memory_address(address++, instruction); // Load instruction into UVSim memory
+    }
+
+    file.close();
+}
