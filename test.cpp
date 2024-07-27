@@ -465,7 +465,7 @@ void case_twentyseven() { // File Case Three
 void case_twentyeight() { // File Case Four: Six-Digit Instructions
     try {
         // Load and convert the file to ensure it has six-digit instructions
-        load_and_convert_file("test5.txt", uvsim);
+        load_and_convert_file("test7.txt", uvsim);
         TEST("CASE 28: Testing file load and conversion to six-digit instructions",
             true,
             "File converforsion or loading failed.");
