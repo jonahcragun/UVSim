@@ -462,12 +462,50 @@ void case_twentyseven() { // File Case Three
     file.close();
 }
 
+void case_twentyeight() { // File Case Four: Six-Digit Instructions
+    try {
+        // Load and convert the file to ensure it has six-digit instructions
+        load_and_convert_file("test5.txt", uvsim);
+        TEST("CASE 28: Testing file load and conversion to six-digit instructions",
+            true,
+            "File converforsion or loading failed.");
+
+        // Define the expected value based on your test case
+        short expected_value = 15; // Example expected value after the operation
+
+        // Set the memory address and opcode based on the expected operations
+        short mem_addr = 0; // Update this to the correct memory address if needed
+        short opcode = 30;  // Update this to the correct opcode if needed
+
+        // Execute the opcode
+        uvsim.execute_op(opcode, mem_addr, 0);
+
+        // Verify the result of six-digit instruction execution
+        short result = uvsim.get_accumulator();
+        TEST("CASE 28.1: Verifying the result of six-digit instruction execution",
+            result == expected_value,
+            "Failed to get the expected result for six-digit instructions. Expected: " + std::to_string(expected_value) + ", Got: " + std::to_string(result));
+    }
+    catch (const std::exception& e) {
+        TEST("CASE 28: Testing file load and conversion to six-digit instructions",
+            false,
+            std::string("Exception occurred: ") + e.what());
+    }
+}
+
+void load_and_convert_file(const std::string& filename, UVSim& uvsim) {
+    try {
+        load_instructions_from_file(filename, uvsim);
+    } catch (const std::exception& e) {
+        throw std::runtime_error("Error in load_and_convert_file: " + std::string(e.what()));
+    }
+}
 // COMPILE COMMAND: make test
 // RUN COMMAND: (Linux, MacOS) ./test.out  (Windows) test.exe
 int main() {
 //    TestHandler::get_instance().set_verbose(true); // Comment out this line if you want to see only failed tests
 
-    int total_tests = 27;
+    int total_tests = 28;
     for (int i = 1; i <= total_tests; (TEST_REPORT(i), CLEAR_RESULTS(), ++i)) {
         switch (i) {
             case 1:
@@ -548,8 +586,11 @@ int main() {
             case 26:
                 case_twentysix();
                 break;
-            case 27:
+	   case 27:
                 case_twentyseven();
+                break;
+            case 27:
+                case_twentyeight();
                 break;
             default:
                 break;
