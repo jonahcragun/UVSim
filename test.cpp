@@ -589,7 +589,7 @@ int main() {
 	   case 27:
                 case_twentyseven();
                 break;
-            case 27:
+            case 28:
                 case_twentyeight();
                 break;
             default:
