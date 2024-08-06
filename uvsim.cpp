@@ -9,6 +9,7 @@
 #include <vector>
 #include <string>
 #include <stdexcept>
+#include <fstream>
 
 // Reset memory to 0
 void UVSim::reset_memory() {
